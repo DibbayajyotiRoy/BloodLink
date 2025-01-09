@@ -127,7 +127,9 @@ bloodBankRoute.post('/signin', async (req,res)=>{
 })
 
 bloodBankRoute.post('/addblood', bloodBankAuth, async (req, res) =>{
-    
+    res.send({
+        message:"working fine"
+    })
 })
 
 export {bloodBankRoute}
