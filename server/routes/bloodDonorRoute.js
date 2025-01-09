@@ -9,7 +9,7 @@ const bloodDonorRoute = express.Router()
 
 bloodDonorRoute.post('/signup', async (req,res)=>{
     try {
-        const {name, email, password, number, address,eligibility,bloodType,lastDonated} = req.body
+        const {name, email, password, number, address, eligibility, bloodType, lastDonated} = req.body
         const requiredBody = z.object({
             name:z.string().min(3).max(100),   
             email:z.string().min(3).max(100).email(),   
