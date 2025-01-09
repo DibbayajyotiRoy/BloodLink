@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 const JWT_SECRET = 'BloodLink'
 
 import { bloodBankModel } from '../database/Schema/bloodBank.js'
-import {bloodBankAuth} from '../middlewares/bloodBankAuth.js'
+// import {bloodBankAuth} from '../middlewares/bloodBankAuth.js'
 
 const bloodBankRoute = express.Router()
 
@@ -126,8 +126,8 @@ bloodBankRoute.post('/signin', async (req,res)=>{
     }
 })
 
-bloodBankRoute.post('/addblood', bloodBankAuth, async (req, res) =>{
+// bloodBankRoute.post('/addblood', bloodBankAuth, async (req, res) =>{
     
-})
+// })
 
 export {bloodBankRoute}
