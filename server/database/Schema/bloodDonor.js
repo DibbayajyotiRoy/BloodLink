@@ -40,6 +40,14 @@ const bloodDonorSchema = new mongoose.Schema({
             state:String,
             District:String
         }
+    },
+    latitude: {
+        type: Number,
+        required: false,  // Not required on signup directly, will be populated via geocoding
+    },
+    longitude: {
+        type: Number,
+        required: false,  // Not required on signup directly, will be populated via geocoding
     }
 })
 
