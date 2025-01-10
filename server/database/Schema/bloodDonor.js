@@ -35,12 +35,9 @@ const bloodDonorSchema = new mongoose.Schema({
         type:String,
         default:null
     },
-    address:{
-        type:{
-            state:String,
-            District:String
-        }
-    }
+    state:String,
+    district:String
+    
 })
 
 const bloodDonorModel = mongoose.model("blooddonors",bloodDonorSchema)
