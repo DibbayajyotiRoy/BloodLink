@@ -1,4 +1,6 @@
-require("dotenv").config();
+// To this
+import dotenv from 'dotenv';
+dotenv.config();
 import express from "express";
 import mongoose from "mongoose";
 import rateLimit from "express-rate-limit";
@@ -7,6 +9,7 @@ import helmet from "helmet";
 import mongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
 import cookieParser from "cookie-parser";
+import winston from 'winston';
 import { bloodBankRoute } from "./routes/bloodBankRoute.js";
 import { bloodDonorRoute } from "./routes/bloodDonorRoute.js";
 
@@ -53,6 +56,58 @@ app.use(mongoSanitize());
 app.use(hpp());
 app.use("/api", limiter);
 
+// Initialize Winston logger
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'app.log' })
+  ]
+});
+
+// MongoDB connection function
+const connectToDatabase = async () => {
+  try {
+    const response = await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    
+    logger.info('MongoDB connected SUCCESSFULLY');
+    return response;
+  } catch (error) {
+    logger.error('MongoDB connection error:', error);
+    throw new Error('Database connection failed');
+  }
+};
+
+
+
+// Main application function
+const main = async () => {
+  try {
+    await connectToDatabase();
+    
+    // Start the Express server
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      logger.info(`Server is running on port ${PORT}`);
+    });
+    
+  } catch (error) {
+    logger.error('Application startup error:', error);
+    process.exit(1); // Exit the process with failure
+  }
+};
+
+// Execute the main function
+main();
+
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
@@ -61,17 +116,45 @@ app.use((req, res) => {
   });
 });
 
-const main = async () => {
-  try {
-    const response = await mongoose.connect(process.env.MONGO_URI);
-    if (response) {
-      console.log(response);
-      console.log("mongodb working fine");
-      app.listen(3000);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
 
-main();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const main = async () => {
+//   try {
+//     const response = await mongoose.connect(process.env.MONGO_URI);
+//     if (response) {
+//       console.log(response);
+//       console.log("mongodb working fine");
+//       app.listen(3000);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+// main();
