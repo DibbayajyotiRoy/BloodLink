@@ -39,7 +39,7 @@ const BloodBankRegister: React.FC = () => {
 
   const onSubmit = async (data: FormData) => {
     try {
-      const response = await axios.post('/api/bloodbank/signup', data);
+      const response = await axios.post('http://localhost:3000/api/bloodbank/signup', data);
       toast.success(response.data.message);
     } catch (error) {
       console.error('Registration error:', error);
