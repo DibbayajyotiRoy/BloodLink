@@ -1,5 +1,6 @@
 // import { useState } from 'react'
 import DonorForm from './pages/UserRegister'
+import BloodBankRegister from './pages/bloodBankregister'
 import './App.css'
 
 function App() {
@@ -7,9 +8,10 @@ function App() {
 
   return (
     <>
-     <DonorForm />
+    <BloodBankRegister/>
+     {/* <DonorForm /> */}
     </>
   )
 }
 
-export default App
+export default App;

@@ -56,11 +56,11 @@ export default function DonorForm() {
           render={({ field }) => (
             
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel className="flex">Username</FormLabel>
               <FormControl>
-                <Input placeholder="someone" type="text" {...field} />
+                <Input className="shadow hover:shadow-lg" placeholder="Someone" type="text" {...field} />
               </FormControl>
-              <FormDescription>This is your public display name.</FormDescription>
+              <FormDescription>This is your public display name. Please enter your name</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -73,9 +73,9 @@ export default function DonorForm() {
           name="name_5062014857"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Address</FormLabel>
+              <FormLabel className="flex">Address</FormLabel>
               <FormControl>
-                <Input placeholder="Agartala, Tripura" type="text" {...field} />
+                <Input className="shadow hover:shadow-lg" placeholder="Agartala, Tripura" type="text" {...field} />
               </FormControl>
               <FormDescription>This is your public display address. Kindly write your city, state.</FormDescription>
               <FormMessage />
@@ -92,11 +92,11 @@ export default function DonorForm() {
               name="name_6037749245"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>E-Mail</FormLabel>
+                  <FormLabel className="flex">E-Mail</FormLabel>
                   <FormControl>
-                    <Input placeholder="someone@gmail.com" type="email" {...field} />
+                    <Input className="shadow hover:shadow-lg" placeholder="someone@gmail.com" type="email" {...field} />
                   </FormControl>
-                  <FormDescription>This is your public display email.</FormDescription>
+                  <FormDescription>Enter your email</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -110,11 +110,11 @@ export default function DonorForm() {
               name="name_7157177887"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Blood Group</FormLabel>
+                  <FormLabel className="flex">Blood Group</FormLabel>
                   <FormControl>
-                    <Input placeholder="" type="text" {...field} />
+                    <Input className="shadow hover:shadow-lg" placeholder="A+" type="text" {...field} />
                   </FormControl>
-                  <FormDescription>This is your public display Blood group.</FormDescription>
+                  <FormDescription>Enter your Blood group.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -127,11 +127,11 @@ export default function DonorForm() {
               name="name_6037749245"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="flex">Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="someone123456" type="password" {...field} />
+                    <Input className="shadow hover:shadow-lg" placeholder="someone$123456" type="password" {...field} />
                   </FormControl>
-                  <FormDescription>This is your password.</FormDescription>
+                  <FormDescription>Choose a strong password.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -142,11 +142,11 @@ export default function DonorForm() {
           name="name_8219849486"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Contact No.</FormLabel>
+              <FormLabel className="flex">Contact No.</FormLabel>
               <FormControl>
-                <Input placeholder="1234567890" type="number" {...field} />
+                <Input className="shadow hover:shadow-lg" placeholder="1234567890" type="number" {...field} />
               </FormControl>
-              <FormDescription>This is your public display contact No.</FormDescription>
+              <FormDescription>This is your public display contact No. Please enter your contact number</FormDescription>
               <FormMessage />
             </FormItem>
           )}

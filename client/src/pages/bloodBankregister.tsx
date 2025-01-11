@@ -55,11 +55,11 @@ const BloodBankRegister: React.FC = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel className='flex'>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Blood Bank Name" {...field} />
+                <Input className="shadow hover:shadow-lg" placeholder="Blood Bank Name" {...field} />
               </FormControl>
-              <FormDescription>This is the name of the blood bank.</FormDescription>
+              <FormDescription>Enter the name of the blood bank.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -70,11 +70,11 @@ const BloodBankRegister: React.FC = () => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className='flex'>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="example@bloodbank.com" {...field} />
+                <Input className="shadow hover:shadow-lg" type="email" placeholder="example@bloodbank.com" {...field} />
               </FormControl>
-              <FormDescription>This is your contact email.</FormDescription>
+              <FormDescription>Enter your contact email.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -85,9 +85,9 @@ const BloodBankRegister: React.FC = () => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel className='flex'>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Enter your password" {...field} />
+                <Input className="shadow hover:shadow-lg" type="password" placeholder="someone$123456" {...field} />
               </FormControl>
               <FormDescription>Choose a strong password.</FormDescription>
               <FormMessage />
@@ -100,11 +100,11 @@ const BloodBankRegister: React.FC = () => {
           name="number"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Contact Number</FormLabel>
+              <FormLabel className='flex'>Contact Number</FormLabel>
               <FormControl>
-                <Input type="text" placeholder="1234567890" {...field} />
+                <Input className="shadow hover:shadow-lg" type="text" placeholder="1234567890" {...field} />
               </FormControl>
-              <FormDescription>This is your contact number.</FormDescription>
+              <FormDescription>Enter your contact number.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -118,9 +118,9 @@ const BloodBankRegister: React.FC = () => {
               name="address.state"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>State</FormLabel>
+                  <FormLabel className='flex'>State</FormLabel>
                   <FormControl>
-                    <Input placeholder="State" {...field} />
+                    <Input className="shadow hover:shadow-lg" placeholder="State" {...field} />
                   </FormControl>
                   <FormDescription>Enter the state of the blood bank.</FormDescription>
                   <FormMessage />
@@ -135,9 +135,9 @@ const BloodBankRegister: React.FC = () => {
               name="address.district"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>District</FormLabel>
+                  <FormLabel className='flex'>District</FormLabel>
                   <FormControl>
-                    <Input placeholder="District" {...field} />
+                    <Input className="shadow hover:shadow-lg" placeholder="District" {...field} />
                   </FormControl>
                   <FormDescription>Enter the district of the blood bank.</FormDescription>
                   <FormMessage />
