@@ -21,6 +21,12 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet());
 app.use(mongoSanitize());
 app.use(hpp());
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 100, // limit each IP to 100 requests per windowMs
+    message: "Too many requests from this IP, please try later",
+  });
+  
 app.use("/api", limiter);
 
 //CORS Configuration
@@ -48,11 +54,6 @@ app.use(cookieParser());
 
 
 //Global Rate Limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  limit: 100, // limit each IP to 100 requests per windowMs
-  message: "Too many requests from this IP, please try later",
-});
 
 // 404 handler
 app.use((req, res) => {
@@ -67,3 +68,4 @@ app.listen(PORT, () => {
     `Server is running on port ${PORT} in ${process.env.NODE_ENV} mode`
   );
 });
+

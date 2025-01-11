@@ -2,7 +2,6 @@ import express from "express";
 import { bloodDonorModel } from "../database/Schema/bloodDonor.js";
 import z from "zod";
 import fetch from "node-fetch";
-import geolib from "geolib";
 
 const bloodDonorRoute = express.Router();
 
@@ -70,7 +69,6 @@ bloodDonorRoute.post("/signup", async (req, res) => {
   }
 });
 
-// Helper function: Geocode a location
 const geocodeLocation = async (district, state) => {
   const geocodeURL = `https://nominatim.openstreetmap.org/search?district=${encodeURIComponent(
     district
@@ -92,15 +90,13 @@ const geocodeLocation = async (district, state) => {
   }
 };
 
-// Route to find donors
-// Route to find donors
+
 bloodDonorRoute.post("/find-donors", async (req, res) => {
     console.log("Request received:", req.body);
   
     try {
       const { state, bloodType,district } = req.body;
   
-      // Validate input
       const inputSchema = z.object({
         state: z.string().min(2).max(100),
         bloodType: z.string().min(2).max(10),
@@ -126,7 +122,6 @@ bloodDonorRoute.post("/find-donors", async (req, res) => {
         return res.status(404).json({ message: "No donors found" });
       }
   
-      // Respond with the list of donors
       res.status(200).json({ donors });
     } catch (error) {
       console.error("Error finding donors:", error);
