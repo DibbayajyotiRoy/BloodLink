@@ -1,4 +1,4 @@
-import "dotenv/config";
+require("dotenv").config();
 import express from "express";
 import mongoose from "mongoose";
 import rateLimit from "express-rate-limit";
@@ -17,18 +17,7 @@ app.use("/blooddonor", bloodDonorRoute);
 
 const PORT = process.env.PORT || 3000;
 
-//Security middleware
-app.use(helmet());
-app.use(mongoSanitize());
-app.use(hpp());
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    limit: 100, // limit each IP to 100 requests per windowMs
-    message: "Too many requests from this IP, please try later",
-  });
-  
-app.use("/api", limiter);
-
+//CORS Configuration
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5100",
@@ -51,8 +40,18 @@ app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 app.use(cookieParser());
 
-
 //Global Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100, // limit each IP to 100 requests per windowMs
+  message: "Too many requests from this IP, please try later",
+});
+
+//Security middleware
+app.use(helmet());
+app.use(mongoSanitize());
+app.use(hpp());
+app.use("/api", limiter);
 
 // 404 handler
 app.use((req, res) => {
@@ -62,16 +61,17 @@ app.use((req, res) => {
   });
 });
 
-const main = async()=>{
+const main = async () => {
   try {
-    const response = await mongoose.connect(process.env.MONGO_URI)
-    if(response){
-      console.log(response)
-      console.log("mongodb working fine")
-      app.listen(3000)
+    const response = await mongoose.connect(process.env.MONGO_URI);
+    if (response) {
+      console.log(response);
+      console.log("mongodb working fine");
+      app.listen(3000);
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
-main()
+};
+
+main();
