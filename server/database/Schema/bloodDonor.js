@@ -35,10 +35,32 @@ const bloodDonorSchema = new mongoose.Schema({
         type:String,
         default:null
     },
+<<<<<<< HEAD
 
-    state:String,
-    district:String,
+=======
+>>>>>>> fb2a1c6bdda6ed8fb084c855fbe7e7f967e7f6eb
+    address:{
+        type:{
+            state:String,
+            District:String
+        }
+    }
+    // latitude: {
+    //     type: Number,
+    //     required: false,  // Not required on signup directly, will be populated via geocoding
+    // },
+    // longitude: {
+    //     type: Number,
+    //     required: false,  // Not required on signup directly, will be populated via geocoding
+    // }
+<<<<<<< HEAD
+
+
+    // state:String,
+    // district:String,
     
+=======
+>>>>>>> fb2a1c6bdda6ed8fb084c855fbe7e7f967e7f6eb
 })
 
 const bloodDonorModel = mongoose.model("blooddonors",bloodDonorSchema)
