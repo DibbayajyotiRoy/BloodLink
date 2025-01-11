@@ -9,7 +9,7 @@ import hpp from "hpp";
 import cookieParser from "cookie-parser";
 import { bloodBankRoute } from "./routes/bloodBankRoute.js";
 import { bloodDonorRoute } from "./routes/bloodDonorRoute.js";
-
+// just a random comment
 const app = express();
 app.use(express.json());
 app.use("/bloodbank", bloodBankRoute);
