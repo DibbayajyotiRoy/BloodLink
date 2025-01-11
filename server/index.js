@@ -29,7 +29,6 @@ const limiter = rateLimit({
   
 app.use("/api", limiter);
 
-//CORS Configuration
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5100",
@@ -63,9 +62,16 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(
-    `Server is running on port ${PORT} in ${process.env.NODE_ENV} mode`
-  );
-});
-
+const main = async()=>{
+  try {
+    const response = await mongoose.connect(process.env.MONGO_URI)
+    if(response){
+      console.log(response)
+      console.log("mongodb working fine")
+      app.listen(3000)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+main()

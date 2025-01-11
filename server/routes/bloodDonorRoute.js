@@ -2,23 +2,22 @@ import express from "express";
 import { bloodDonorModel } from "../database/Schema/bloodDonor.js";
 import z from "zod";
 import fetch from "node-fetch";
-
+import bcrypt from 'bcrypt'
 const bloodDonorRoute = express.Router();
 
 
 // Route to sign up donors (unchanged)
 bloodDonorRoute.post("/signup", async (req, res) => {
   try {
-    const { name, email, password, number, address, eligibility, bloodType, lastDonated } = req.body;
+    const { name, email, password, number, state, district, eligibility, bloodType, lastDonated } = req.body;
     const requiredBody = z.object({
       name: z.string().min(3).max(100),
       email: z.string().min(3).max(100).email(),
       password: z.string().min(3).max(100),
       number: z.string().regex(/^\d{10}$/, "Enter a valid 10-digit phone number"),
-      address: z.object({
-        state: z.string().min(2).max(100, "State must be between 2 and 100 characters"),
-        district: z.string().min(2).max(100, "District must be between 2 and 100 characters"),
-      }),
+      state: z.string().min(2).max(100, "State must be between 2 and 100 characters"),
+      district: z.string().min(2).max(100, "District must be between 2 and 100 characters"),
+      
     });
     const { success } = requiredBody.safeParse(req.body);
 
@@ -37,7 +36,8 @@ bloodDonorRoute.post("/signup", async (req, res) => {
         email,
         password: hashedPassword,
         number,
-        address,
+        state,
+        district,
         bloodType,
         lastDonated,
         eligibility,
