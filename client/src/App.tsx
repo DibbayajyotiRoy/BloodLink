@@ -6,9 +6,9 @@ import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
 // Lazy load components
-const LandingPage = React.lazy(() => import('./dashboard/landing/page'));
-const DonorForm = React.lazy(() => import('./pages/UserRegister'));
-const BloodBankRegister = React.lazy(() => import('./pages/BloodBankRegister'));
+const LandingPage = React.lazy(() => import('./Landing/page'));
+const DonorForm = React.lazy(() => import('./SignUp/UserRegister'));
+const BloodBankRegister = React.lazy(() => import('./SignUp/BloodBankRegister'));
 const BloodSeekersPage = React.lazy(() => import('./dashboard/BloodSeekers/page'));
 const NotFound = React.lazy(() => import('./components/NotFound'));
 

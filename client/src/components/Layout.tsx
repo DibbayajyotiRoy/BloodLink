@@ -119,9 +119,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Desktop Navigation */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
         <div className="flex flex-col flex-grow border-r border-gray-200 bg-white pt-5 pb-4">
-          <div className="flex items-center flex-shrink-0 px-4">
+          {/* <div className="flex items-center flex-shrink-0 px-4">
             <h1 className="text-xl font-bold">BloodLink</h1>
-          </div>
+          </div> */}
           <div className="flex-grow flex flex-col mt-8 px-3">
             <NavItems />
           </div>
