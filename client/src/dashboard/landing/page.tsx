@@ -3,11 +3,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input";
 import axios from "axios";
 // import { Link } from "react-router-dom";
-
-
 
 interface BloodDonor {
   id: number;
@@ -16,15 +14,13 @@ interface BloodDonor {
   location: string;
 }
 
-
 const BloodSeekersPage = () => {
   const [donors, setDonors] = useState<BloodDonor[]>([]);
   const [filteredDonors, setFilteredDonors] = useState<BloodDonor[]>([]);
   const [bloodType, setBloodType] = useState<string>("");
   const [location, setLocation] = useState<string>("");
 
-
-// Fetch donors from the API
+  // Fetch donors from the API
   const fetchDonors = async () => {
     try {
       const response = await axios.get("http://localhost:3000/api/blooddonors"); // Adjust the endpoint as necessary
@@ -34,13 +30,15 @@ const BloodSeekersPage = () => {
       console.error("Error fetching donors:", error);
     }
   };
-  
+
   // Filter donors based on blood type and location
   useEffect(() => {
-    const filtered = donors.filter(donor => {
+    const filtered = donors.filter((donor) => {
       return (
         (bloodType ? donor.bloodType === bloodType : true) &&
-        (location ? donor.location.toLowerCase().includes(location.toLowerCase()) : true)
+        (location
+          ? donor.location.toLowerCase().includes(location.toLowerCase())
+          : true)
       );
     });
     setFilteredDonors(filtered);
@@ -49,7 +47,6 @@ const BloodSeekersPage = () => {
   useEffect(() => {
     fetchDonors();
   }, []);
-
 
   return (
     <div className="container mx-auto p-4">
@@ -66,13 +63,37 @@ const BloodSeekersPage = () => {
       </div>
 
       <div className="mb-4">
-         <Input
+        {/* <Input
           type="text"
           placeholder="Search by location..."
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           className="mb-2"
-        />
+        /> */}
+        <select value={location} onChange={(e) => setLocation(e.target.value)} className="w-full  shadow hover:shadow-lg border rounded-md p-1.5 ">
+          <option value="">Select your Sub-Division</option>
+          <option value="Dukli">Dukli</option>
+          <option value="Jirania">Jirania</option>
+          <option value="Mohanpur">Mohanpur</option>
+          <option value="Mandwi">Mandwi</option>
+          <option value="Khowai">Khowai</option>
+          <option value="Teliamura">Teliamura</option>
+          <option value="Tulasikhar">Tulasikhar</option>
+          <option value="Bishalgarh">Bishalgarh</option>
+          <option value="Melaghar">Melaghar</option>
+          <option value="Matabari">Matabari</option>
+          <option value="Amarpur">Amarpur</option>
+          <option value="Rajnagar">Rajnagar</option>
+          <option value="Bakafa">Bakafa</option>
+          <option value="Satchand">Satchand</option>
+          <option value="Rupaichari">Rupaichari</option>
+          <option value="Kadamtala">Kadamtala</option>
+          <option value="Kanchanpur">Kanchanpur</option>
+          <option value="Panisagar">Panisagar</option>
+          <option value="Salema">Salema</option>
+          <option value="Gandacherra">Gandacherra</option>
+          <option value="Chawmanu">Chawmanu</option>
+        </select>
         <select
           value={bloodType}
           onChange={(e) => setBloodType(e.target.value)}
@@ -97,105 +118,23 @@ const BloodSeekersPage = () => {
             <p>Blood Type: {donor.bloodType}</p>
             <p>Location: {donor.location}</p>
             {/* Add any additional donor information here */}
-            <Button className="mt-2" onClick={() => alert(`Contact ${donor.name}`)}>Contact</Button>
+            <Button
+              className="mt-2"
+              onClick={() => alert(`Contact ${donor.name}`)}
+            >
+              Contact
+            </Button>
           </div>
         ))}
       </div>
 
       {filteredDonors.length === 0 && (
-        <p className="mt-4 text-center">No donors found matching your criteria.</p>
+        <p className="mt-4 text-center">
+          No donors found matching your criteria.
+        </p>
       )}
-
     </div>
   );
 };
 
 export default BloodSeekersPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

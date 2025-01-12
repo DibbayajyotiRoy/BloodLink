@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 
 
@@ -63,17 +63,34 @@ const BloodSeekersPage = () => {
       </div>
 
       <div className="mb-4">
-         <Input
-          type="text"
-          placeholder="Search by location..."
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          className="mb-2"
-        />
+      <select value={location} onChange={(e) => setLocation(e.target.value)} className="w-full mb-8 mt-6  shadow hover:shadow-lg border rounded-md p-1.5 ">
+          <option value="">Select your Sub-Division</option>
+          <option value="Dukli">Dukli</option>
+          <option value="Jirania">Jirania</option>
+          <option value="Mohanpur">Mohanpur</option>
+          <option value="Mandwi">Mandwi</option>
+          <option value="Khowai">Khowai</option>
+          <option value="Teliamura">Teliamura</option>
+          <option value="Tulasikhar">Tulasikhar</option>
+          <option value="Bishalgarh">Bishalgarh</option>
+          <option value="Melaghar">Melaghar</option>
+          <option value="Matabari">Matabari</option>
+          <option value="Amarpur">Amarpur</option>
+          <option value="Rajnagar">Rajnagar</option>
+          <option value="Bakafa">Bakafa</option>
+          <option value="Satchand">Satchand</option>
+          <option value="Rupaichari">Rupaichari</option>
+          <option value="Kadamtala">Kadamtala</option>
+          <option value="Kanchanpur">Kanchanpur</option>
+          <option value="Panisagar">Panisagar</option>
+          <option value="Salema">Salema</option>
+          <option value="Gandacherra">Gandacherra</option>
+          <option value="Chawmanu">Chawmanu</option>
+        </select>
         <select
           value={bloodType}
           onChange={(e) => setBloodType(e.target.value)}
-          className="mb-2 border rounded p-2"
+          className="mb-2 border rounded p-2 shadow hover:shadow-lg"
         >
           <option value="">Select Blood Type</option>
           <option value="A+">A+</option>
