@@ -13,6 +13,7 @@ const BloodBankRegister = React.lazy(() => import('./SignUp/BloodBankRegister'))
 const BloodSeekersPage = React.lazy(() => import('./dashboard/BloodSeekers/page'));
 const BloodBankDashboard = React.lazy(() => import('./dashboard/bloodBank/page'));
 const NotFound = React.lazy(() => import('./components/NotFound'));
+const Login = React.lazy(()=> import('./login/login'))
 
 // Define route configuration
 const routes = [
@@ -23,6 +24,7 @@ const routes = [
   { path: '/dashboard', element: <BloodBankDashboard /> },
   { path: '/404', element: <NotFound /> },
   { path: '*', element: <Navigate replace to="/404" /> },
+  { path: '/login', element: <Login/>}
 ];
 
 function App() {

@@ -229,7 +229,7 @@ export default function DonorForm() {
 
             {/* Submit Button */}
             <Button
-              className="min-w-40 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
+              className="min-w-40 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg"
               type="submit"
             >
               Submit

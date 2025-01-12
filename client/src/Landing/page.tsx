@@ -3,12 +3,13 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Droplet, Heart, Users, ArrowRight } from 'lucide-react';
+import Footer from "../components/Footer.tsx"
 
 const LandingPage = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-red-50 to-white">
+    <div className="flex flex-col h-screen min-h-screen bg-gradient-to-b from-red-50 to-white">
       {/* Top Navigation */}
-      <header className="sticky top-0 z-10 bg-white shadow-sm">
+      <header className="sticky top-0 z-10 bg-white shadow-lg">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="flex items-center space-x-2">
             <Droplet className="h-8 w-8 text-red-600" />
@@ -100,7 +101,7 @@ const LandingPage = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8">
+      {/* <footer className="bg-gray-800 text-white py-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
@@ -118,7 +119,8 @@ const LandingPage = () => {
             <p>&copy; {new Date().getFullYear()} BloodLink Blood Donation Platform. All rights reserved.</p>
           </div>
         </div>
-      </footer>
+      </footer> */}
+      <Footer/>
     </div>
   );
 };
