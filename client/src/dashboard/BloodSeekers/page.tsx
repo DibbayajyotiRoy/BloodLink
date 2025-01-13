@@ -31,6 +31,7 @@ const BloodSeekersPage = () => {
         }
       );
       setDonors(response.data.donors);
+      console.log(donors)
       setFilteredDonors(response.data.donors);
     } catch (error) {
       console.error("Error fetching donors:", error);
