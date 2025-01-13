@@ -3,13 +3,14 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Droplet } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 interface BloodDonor {
   id: number;
   name: string;
   bloodType: string;
   subdivision: string;
-  state: string;  // Add state field
+  state: string;
   email: string;
   number: string;
 }
@@ -24,52 +25,50 @@ interface BloodBank {
 }
 
 const BloodSeekersPage = () => {
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState<'donors' | 'banks'>('donors');
-  const [donors, setDonors] = useState<BloodDonor[]>([]); // All donors
-  const [filteredDonors, setFilteredDonors] = useState<BloodDonor[]>([]); // Filtered donors
+  const [donors, setDonors] = useState<BloodDonor[]>([]);
+  const [filteredDonors, setFilteredDonors] = useState<BloodDonor[]>([]);
   const [banks, setBanks] = useState<BloodBank[]>([]);
   const [filteredBanks, setFilteredBanks] = useState<BloodBank[]>([]);
   const [bloodType, setBloodType] = useState<string>("");
-  const [location, setLocation] = useState<string>(""); // Location is subdivision
+  const [donorLocation, setDonorLocation] = useState<string>("");
+  const [bankLocation, setBankLocation] = useState<string>("");
   const [state, setState] = useState<string>("");
 
-  // Fetch donors from the API with POST request
   const fetchData = async () => {
     try {
       const response = await axios.post("http://localhost:3000/blooddonor/find-donors", {
         state : "Tripura",
-        subdivision: location,
+        subdivision: donorLocation,
         bloodType,
       });
       setDonors(response.data.donors);
-      setFilteredDonors(response.data.donors); // Initially, show all donors
+      setFilteredDonors(response.data.donors);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  // Fetch blood banks from the API
   const fetchBanks = async () => {
     try {
       const response = await axios.get("http://localhost:3000/bloodbank/find-banks");
       setBanks(response.data.banks);
-      console.log(banks)
-      setFilteredBanks(response.data.banks); // Initially, show all banks
+      setFilteredBanks(response.data.banks);
     } catch (error) {
       console.error("Error fetching banks:", error);
     }
   };
 
-  // Apply the filters dynamically based on the selected bloodType, location, and state
   const filterDonors = () => {
-    let filtered = [...donors]; // Start with all donors
+    let filtered = [...donors];
 
     if (bloodType) {
       filtered = filtered.filter(donor => donor.bloodType === bloodType);
     }
 
-    if (location) {
-      filtered = filtered.filter(donor => donor.subdivision.toLowerCase() === location.toLowerCase());
+    if (donorLocation) {
+      filtered = filtered.filter(donor => donor.subdivision.toLowerCase() === donorLocation.toLowerCase());
     }
 
     if (state) {
@@ -79,19 +78,119 @@ const BloodSeekersPage = () => {
     setFilteredDonors(filtered);
   };
 
-  // UseEffect to call fetchData once on mount and fetchBanks as well
+  const filterBanks = () => {
+    let filtered = [...banks];
+
+    if (bankLocation) {
+      filtered = filtered.filter(bank => bank.subdivision.toLowerCase() === bankLocation.toLowerCase());
+    }
+
+    setFilteredBanks(filtered);
+  };
+
   useEffect(() => {
     fetchData();
     fetchBanks();
   }, []);
 
-  // UseEffect to apply filters when bloodType, location, or state changes
   useEffect(() => {
     filterDonors();
-  }, [bloodType, location, state]);
+  }, [bloodType, donorLocation, state]);
+
+  useEffect(() => {
+    filterBanks();
+  }, [bankLocation]);
 
   const toggleSection = (section: 'donors' | 'banks') => {
     setActiveSection(section);
+  };
+
+  const renderSearchFilters = () => {
+    if (activeSection === 'donors') {
+      return (
+        <>
+          <select
+            title="location"
+            value={donorLocation}
+            onChange={(e) => setDonorLocation(e.target.value)}
+            className="border rounded p-2 shadow hover:shadow-lg w-full sm:w-76"
+          >
+            <option value="">Select your Sub-Division</option>
+            <option value="Dukli">Dukli</option>
+            <option value="Jirania">Jirania</option>
+            <option value="Mohanpur">Mohanpur</option>
+            <option value="Mandwi">Mandwi</option>
+            <option value="Khowai">Khowai</option>
+            <option value="Teliamura">Teliamura</option>
+            <option value="Tulasikhar">Tulasikhar</option>
+            <option value="Bishalgarh">Bishalgarh</option>
+            <option value="Melaghar">Melaghar</option>
+            <option value="Matabari">Matabari</option>
+            <option value="Amarpur">Amarpur</option>
+            <option value="Rajnagar">Rajnagar</option>
+            <option value="Bakafa">Bakafa</option>
+            <option value="Satchand">Satchand</option>
+            <option value="Rupaichari">Rupaichari</option>
+            <option value="Kadamtala">Kadamtala</option>
+            <option value="Kanchanpur">Kanchanpur</option>
+            <option value="Panisagar">Panisagar</option>
+            <option value="Salema">Salema</option>
+            <option value="Gandacherra">Gandacherra</option>
+            <option value="Chawmanu">Chawmanu</option>
+            <option value="Sadar">Sadar</option>
+          </select>
+          <select
+            title="bloodType"
+            value={bloodType}
+            onChange={(e) => setBloodType(e.target.value)}
+            className="border rounded p-2 shadow hover:shadow-lg w-full sm:w-76"
+          >
+            <option value="">Select Blood Type</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+          </select>
+        </>
+      );
+    } else {
+      return (
+        <select
+          title="location"
+          value={bankLocation}
+          onChange={(e) => setBankLocation(e.target.value)}
+          className="border rounded p-2 shadow hover:shadow-lg w-full sm:w-76"
+        >
+          <option value="">Select your Sub-Division</option>
+          <option value="Dukli">Dukli</option>
+          <option value="Jirania">Jirania</option>
+          <option value="Mohanpur">Mohanpur</option>
+          <option value="Mandwi">Mandwi</option>
+          <option value="Khowai">Khowai</option>
+          <option value="Teliamura">Teliamura</option>
+          <option value="Tulasikhar">Tulasikhar</option>
+          <option value="Bishalgarh">Bishalgarh</option>
+          <option value="Melaghar">Melaghar</option>
+          <option value="Matabari">Matabari</option>
+          <option value="Amarpur">Amarpur</option>
+          <option value="Rajnagar">Rajnagar</option>
+          <option value="Bakafa">Bakafa</option>
+          <option value="Satchand">Satchand</option>
+          <option value="Rupaichari">Rupaichari</option>
+          <option value="Kadamtala">Kadamtala</option>
+          <option value="Kanchanpur">Kanchanpur</option>
+          <option value="Panisagar">Panisagar</option>
+          <option value="Salema">Salema</option>
+          <option value="Gandacherra">Gandacherra</option>
+          <option value="Chawmanu">Chawmanu</option>
+          <option value="Sadar">Sadar</option>
+        </select>
+      );
+    }
   };
 
   return (
@@ -142,53 +241,7 @@ const BloodSeekersPage = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
-          <select
-            title="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="border rounded p-2 shadow hover:shadow-lg w-full sm:w-76"
-          >
-            <option value="">Select your Sub-Division</option>
-            {/* Add all subdivision options */}
-            <option value="Dukli">Dukli</option>
-            <option value="Jirania">Jirania</option>
-            <option value="Mohanpur">Mohanpur</option>
-            <option value="Mandwi">Mandwi</option>
-            <option value="Khowai">Khowai</option>
-            <option value="Teliamura">Teliamura</option>
-            <option value="Tulasikhar">Tulasikhar</option>
-            <option value="Bishalgarh">Bishalgarh</option>
-            <option value="Melaghar">Melaghar</option>
-            <option value="Matabari">Matabari</option>
-            <option value="Amarpur">Amarpur</option>
-            <option value="Rajnagar">Rajnagar</option>
-            <option value="Bakafa">Bakafa</option>
-            <option value="Satchand">Satchand</option>
-            <option value="Rupaichari">Rupaichari</option>
-            <option value="Kadamtala">Kadamtala</option>
-            <option value="Kanchanpur">Kanchanpur</option>
-            <option value="Panisagar">Panisagar</option>
-            <option value="Salema">Salema</option>
-            <option value="Gandacherra">Gandacherra</option>
-            <option value="Chawmanu">Chawmanu</option>
-            <option value="Sadar">Sadar</option>
-          </select>
-          <select
-            title="bloodType"
-            value={bloodType}
-            onChange={(e) => setBloodType(e.target.value)}
-            className="border rounded p-2 shadow hover:shadow-lg w-full sm:w-76"
-          >
-            <option value="">Select Blood Type</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-          </select>
+          {renderSearchFilters()}
         </div>
 
         {activeSection === 'donors' && (
@@ -203,15 +256,18 @@ const BloodSeekersPage = () => {
                   <p>Blood Type: {donor.bloodType}</p>
                   <p>Email: {donor.email}</p>
                   <p>Contact: {donor.number}</p>
-                  <Button className="mt-2" onClick={() => alert(`Contact ${donor.name}`)}>
-                    Contact
+                  <Button 
+                    className="mt-2" 
+                    onClick={() => navigate(`/profile/${donor.id}`)}
+                  >
+                    View Profile
                   </Button>
                 </div>
               ))
             )}
           </div>
         )}
-
+        
         {activeSection === 'banks' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredBanks.map((bank) => (

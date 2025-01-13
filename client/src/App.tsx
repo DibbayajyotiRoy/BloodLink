@@ -14,6 +14,7 @@ const BloodSeekersPage = React.lazy(() => import('./dashboard/BloodSeekers/page'
 const BloodBankDashboard = React.lazy(() => import('./dashboard/bloodBank/page'));
 const NotFound = React.lazy(() => import('./components/NotFound'));
 const Login = React.lazy(() => import('./login/login'));
+const ProfilePage = React.lazy(() => import('./dashboard/ProfilePage/page'));
 
 // Define route configuration
 const routes = [
@@ -24,6 +25,7 @@ const routes = [
   { path: '/dashboard', element: <BloodBankDashboard /> },
   { path: '/404', element: <NotFound /> },
   { path: '/login', element: <Login /> },
+  { path: '/profile/:id', element: <ProfilePage /> }, // Add profile route with dynamic id parameter
 ];
 
 function App() {
@@ -47,4 +49,3 @@ function App() {
 }
 
 export default App;
-
