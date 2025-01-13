@@ -55,7 +55,7 @@ const LandingPage = () => {
           </div>
           <div className="md:w-1/2">
             <img 
-              src="/placeholder.svg?height=400&width=400" 
+              src="https://i.pinimg.com/1200x/14/8d/ef/148def07f994486fb660fbc48ba24823.jpg" 
               alt="Blood Donation Illustration" 
               className="w-full max-w-md mx-auto rounded-lg shadow-lg"
             />
