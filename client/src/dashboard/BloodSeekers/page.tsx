@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { Droplet } from "lucide-react";
-// import Footer from "../../components/Footer.tsx";
 
 interface BloodDonor {
   id: number;
   name: string;
   bloodType: string;
-  location: string;
+  subdivision: string;
+  email: string;
+  number: string;
 }
 
 const BloodSeekersPage = () => {
@@ -19,33 +19,27 @@ const BloodSeekersPage = () => {
   const [bloodType, setBloodType] = useState<string>("");
   const [location, setLocation] = useState<string>("");
 
-  // Fetch donors from the API
+  // Fetch donors from the API with the applied filters
   const fetchDonors = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/blooddonors"); // Adjust the endpoint as necessary
-      setDonors(response.data);
-      setFilteredDonors(response.data); // Initialize filtered donors
+      const response = await axios.post(
+        "http://localhost:3000/blooddonor/find-donors",
+        {
+          state: "Tripura",
+          subdivision: location, 
+          bloodType: bloodType, 
+        }
+      );
+      setDonors(response.data.donors);
+      setFilteredDonors(response.data.donors);
     } catch (error) {
       console.error("Error fetching donors:", error);
     }
   };
 
-  // Filter donors based on blood type and location
   useEffect(() => {
-    const filtered = donors.filter((donor) => {
-      return (
-        (bloodType ? donor.bloodType === bloodType : true) &&
-        (location
-          ? donor.location.toLowerCase().includes(location.toLowerCase())
-          : true)
-      );
-    });
-    setFilteredDonors(filtered);
-  }, [bloodType, location, donors]);
-
-  useEffect(() => {
-    fetchDonors();
-  }, []);
+    fetchDonors(); // Fetch donors on load and when filters change
+  }, [bloodType, location]);
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-red-50 to-white">
@@ -56,16 +50,10 @@ const BloodSeekersPage = () => {
             <span className="text-2xl font-bold text-gray-800">BloodLink</span>
           </Link>
           <nav className="hidden md:flex space-x-4">
-            <Link
-              to="/about"
-              className="text-gray-600 hover:text-gray-800 transition"
-            >
+            <Link to="/about" className="text-gray-600 hover:text-gray-800 transition">
               About
             </Link>
-            <Link
-              to="/bloodseekers"
-              className="text-gray-600 hover:text-gray-800 transition"
-            >
+            <Link to="/bloodseekers" className="text-gray-600 hover:text-gray-800 transition">
               Find Blood
             </Link>
           </nav>
@@ -86,11 +74,13 @@ const BloodSeekersPage = () => {
 
       <div className="my-4">
         <select
+          title="location"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           className="mb-4 border rounded p-2 shadow hover:shadow-lg w-76 "
         >
           <option value="">Select your Sub-Division</option>
+          {/* Add all subdivision options */}
           <option value="Dukli">Dukli</option>
           <option value="Jirania">Jirania</option>
           <option value="Mohanpur">Mohanpur</option>
@@ -115,6 +105,7 @@ const BloodSeekersPage = () => {
         </select>
         <br />
         <select
+          title="bloodType"
           value={bloodType}
           onChange={(e) => setBloodType(e.target.value)}
           className="mb-2 border rounded p-2 shadow hover:shadow-lg w-76"
@@ -136,12 +127,10 @@ const BloodSeekersPage = () => {
           <div key={donor.id} className="border rounded-lg p-4 shadow-md">
             <h2 className="font-bold text-lg">{donor.name}</h2>
             <p>Blood Type: {donor.bloodType}</p>
-            <p>Location: {donor.location}</p>
-            {/* Add any additional donor information here */}
-            <Button
-              className="mt-2"
-              onClick={() => alert(`Contact ${donor.name}`)}
-            >
+            <p>Location: {donor.subdivision}</p>
+            <p>Email: {donor.email}</p>
+            <p>Number: {donor.number}</p>
+            <Button className="mt-2" onClick={() => alert(`Contact ${donor.name}`)}>
               Contact
             </Button>
           </div>
@@ -153,11 +142,6 @@ const BloodSeekersPage = () => {
           No donors found matching your criteria.
         </p>
       )}
-      
-
-      {/* <div className="inset-x-0 bottom-0">
-        <Footer />
-      </div> */}
     </div>
   );
 };

@@ -84,42 +84,43 @@ bloodDonorRoute.post("/signup", async (req, res) => {
 });
 
 // Route to find donors
+
 bloodDonorRoute.post("/find-donors", async (req, res) => {
   try {
     const { state, subdivision, bloodType } = req.body;
 
-    // Validate input using Zod
-    const inputSchema = z.object({
-      state: z.string().min(2).max(100),
-      subdivision: z.string().min(2).max(100),
-      bloodType: z.string().min(2).max(10),
-    });
+    // Start constructing the query
+    const query = {};
 
-    const validation = inputSchema.safeParse(req.body);
-    if (!validation.success) {
-      return res.status(400).json({ error: "Invalid input data", details: validation.error });
+    // Only add filters if the respective fields are selected
+    if (bloodType) {
+      query.bloodType = bloodType;
     }
 
-    const userLocation = await geocodeLocation(subdivision, state);
-    if (!userLocation) {
-      return res.status(400).json({ error: "Invalid location. Unable to geocode." });
+    if (state) {
+      query.state = state;
     }
 
-    const donors = await bloodDonorModel.find({
-      bloodType,
-      state,
-      subdivision,
-    });
+    if (subdivision) {
+      query.subdivision = subdivision;
+    }
 
+    // Fetch donors based on the query
+    const donors = await bloodDonorModel.find(query);
+
+    // If no donors found, return a message
     if (donors.length === 0) {
       return res.status(404).json({ message: "No donors found" });
     }
 
+    // Respond with the donors' data
     res.status(200).json({ donors });
   } catch (error) {
     console.error("Error finding donors:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+
 
 export { bloodDonorRoute };
