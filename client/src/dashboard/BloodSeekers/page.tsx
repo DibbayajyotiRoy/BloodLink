@@ -9,6 +9,7 @@ interface BloodDonor {
   name: string;
   bloodType: string;
   subdivision: string;
+  state: string;  // Add state field
   email: string;
   number: string;
 }
@@ -24,41 +25,70 @@ interface BloodBank {
 
 const BloodSeekersPage = () => {
   const [activeSection, setActiveSection] = useState<'donors' | 'banks'>('donors');
-  const [donors, setDonors] = useState<BloodDonor[]>([]);
+  const [donors, setDonors] = useState<BloodDonor[]>([]); // All donors
+  const [filteredDonors, setFilteredDonors] = useState<BloodDonor[]>([]); // Filtered donors
   const [banks, setBanks] = useState<BloodBank[]>([]);
-  const [filteredDonors, setFilteredDonors] = useState<BloodDonor[]>([]);
   const [filteredBanks, setFilteredBanks] = useState<BloodBank[]>([]);
   const [bloodType, setBloodType] = useState<string>("");
-  const [location, setLocation] = useState<string>("");
+  const [location, setLocation] = useState<string>(""); // Location is subdivision
+  const [state, setState] = useState<string>("");
 
-  // Fetch donors and banks from the API with the applied filters
+  // Fetch donors from the API with POST request
   const fetchData = async () => {
     try {
-      const [donorsResponse, banksResponse] = await Promise.all([
-        axios.post("http://localhost:3000/blooddonor/find-donors", {
-          state: "Tripura",
-          subdivision: location,
-          bloodType: bloodType,
-        }),
-        axios.post("http://localhost:3000/bloodbank/find-banks", {
-          state: "Tripura",
-          subdivision: location,
-          bloodType: bloodType,
-        })
-      ]);
-
-      setDonors(donorsResponse.data.donors);
-      setBanks(banksResponse.data.banks);
-      setFilteredDonors(donorsResponse.data.donors);
-      setFilteredBanks(banksResponse.data.banks);
+      const response = await axios.post("http://localhost:3000/blooddonor/find-donors", {
+        state : "Tripura",
+        subdivision: location,
+        bloodType,
+      });
+      setDonors(response.data.donors);
+      setFilteredDonors(response.data.donors); // Initially, show all donors
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
+  // Fetch blood banks from the API
+  const fetchBanks = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/bloodbank/find-banks");
+      setBanks(response.data.banks);
+      console.log(banks)
+      setFilteredBanks(response.data.banks); // Initially, show all banks
+    } catch (error) {
+      console.error("Error fetching banks:", error);
+    }
+  };
+
+  // Apply the filters dynamically based on the selected bloodType, location, and state
+  const filterDonors = () => {
+    let filtered = [...donors]; // Start with all donors
+
+    if (bloodType) {
+      filtered = filtered.filter(donor => donor.bloodType === bloodType);
+    }
+
+    if (location) {
+      filtered = filtered.filter(donor => donor.subdivision.toLowerCase() === location.toLowerCase());
+    }
+
+    if (state) {
+      filtered = filtered.filter(donor => donor.state.toLowerCase() === state.toLowerCase());
+    }
+
+    setFilteredDonors(filtered);
+  };
+
+  // UseEffect to call fetchData once on mount and fetchBanks as well
   useEffect(() => {
     fetchData();
-  }, [bloodType, location]);
+    fetchBanks();
+  }, []);
+
+  // UseEffect to apply filters when bloodType, location, or state changes
+  useEffect(() => {
+    filterDonors();
+  }, [bloodType, location, state]);
 
   const toggleSection = (section: 'donors' | 'banks') => {
     setActiveSection(section);
@@ -163,18 +193,22 @@ const BloodSeekersPage = () => {
 
         {activeSection === 'donors' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredDonors.map((donor) => (
-              <div key={donor.id} className="border rounded-lg p-4 shadow-md">
-                <h2 className="font-bold text-lg">{donor.name}</h2>
-                <p>Blood Type: {donor.bloodType}</p>
-                <p>Location: {donor.subdivision}</p>
-                <p>Email: {donor.email}</p>
-                <p>Number: {donor.number}</p>
-                <Button className="mt-2" onClick={() => alert(`Contact ${donor.name}`)}>
-                  Contact
-                </Button>
-              </div>
-            ))}
+            {filteredDonors.length === 0 ? (
+              <p>No donors found matching your criteria.</p>
+            ) : (
+              filteredDonors.map((donor) => (
+                <div key={donor.id} className="border rounded-lg p-4 shadow-md">
+                  <h2 className="font-bold text-lg">{donor.name}</h2>
+                  <p>Location: {donor.subdivision}</p>
+                  <p>Blood Type: {donor.bloodType}</p>
+                  <p>Email: {donor.email}</p>
+                  <p>Contact: {donor.number}</p>
+                  <Button className="mt-2" onClick={() => alert(`Contact ${donor.name}`)}>
+                    Contact
+                  </Button>
+                </div>
+              ))
+            )}
           </div>
         )}
 
@@ -194,22 +228,9 @@ const BloodSeekersPage = () => {
             ))}
           </div>
         )}
-
-        {activeSection === 'donors' && filteredDonors.length === 0 && (
-          <p className="mt-4 text-center">
-            No donors found matching your criteria.
-          </p>
-        )}
-
-        {activeSection === 'banks' && filteredBanks.length === 0 && (
-          <p className="mt-4 text-center">
-            No blood banks found matching your criteria.
-          </p>
-        )}
       </div>
     </div>
   );
 };
 
 export default BloodSeekersPage;
-
