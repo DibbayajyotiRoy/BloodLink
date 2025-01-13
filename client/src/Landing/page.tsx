@@ -15,10 +15,10 @@ const LandingPage = () => {
             <Droplet className="h-8 w-8 text-red-600" />
             <span className="text-2xl font-bold text-gray-800">BloodLink</span>
           </Link>
-          <nav className="hidden md:flex space-x-4">
+          {/* <nav className="hidden md:flex space-x-4">
             <Link to="/about" className="text-gray-600 hover:text-gray-800 transition">About</Link>
             <Link to="/bloodseekers" className="text-gray-600 hover:text-gray-800 transition">Find Blood</Link>
-          </nav>
+          </nav> */}
           <div className="flex space-x-2">
             <Link to="/register/blood-bank">
               <Button variant="outline" className="hidden md:inline-flex">Register as Blood Bank</Button>

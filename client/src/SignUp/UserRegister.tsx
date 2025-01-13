@@ -53,7 +53,7 @@ export default function DonorForm() {
     });
   }, [form.watch()]);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit() {
     try {
       const response = await axios.post(
         "http://localhost:3000/blooddonor/signup",
