@@ -5,7 +5,6 @@ import LoadingSpinner from './components/LoadingSpinner';
 import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
-
 // Lazy load components
 const LandingPage = React.lazy(() => import('./Landing/page'));
 const DonorForm = React.lazy(() => import('./SignUp/UserRegister'));
@@ -13,7 +12,7 @@ const BloodBankRegister = React.lazy(() => import('./SignUp/BloodBankRegister'))
 const BloodSeekersPage = React.lazy(() => import('./dashboard/BloodSeekers/page'));
 const BloodBankDashboard = React.lazy(() => import('./dashboard/bloodBank/page'));
 const NotFound = React.lazy(() => import('./components/NotFound'));
-const Login = React.lazy(()=> import('./login/login'))
+const Login = React.lazy(() => import('./login/login'));
 
 // Define route configuration
 const routes = [
@@ -23,8 +22,7 @@ const routes = [
   { path: '/bloodseekers', element: <BloodSeekersPage /> },
   { path: '/dashboard', element: <BloodBankDashboard /> },
   { path: '/404', element: <NotFound /> },
-  { path: '*', element: <Navigate replace to="/404" /> },
-  { path: '/login', element: <Login/>}
+  { path: '/login', element: <Login /> },
 ];
 
 function App() {
@@ -37,6 +35,7 @@ function App() {
               {routes.map((route) => (
                 <Route key={route.path} path={route.path} element={route.element} />
               ))}
+              <Route path="*" element={<Navigate replace to="/404" />} />
             </Routes>
           </Suspense>
         </Layout>
@@ -46,3 +45,4 @@ function App() {
 }
 
 export default App;
+

@@ -143,6 +143,7 @@ export default function DonorForm() {
                       <option value="Salema">Salema</option>
                       <option value="Gandacherra">Gandacherra</option>
                       <option value="Chawmanu">Chawmanu</option>
+                      <option value="Chawmanu">Sadar</option>
                     </select>
                   </FormControl>
                   <FormDescription>
