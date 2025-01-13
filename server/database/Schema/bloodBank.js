@@ -21,7 +21,6 @@ const bloodBankSchema = new mongoose.Schema({
     required: true,
     match: [/^\d{10}$/, "Enter a valid 10-digit phone number"],
   },
-  address: {
     state: {
       type: String,
       required: true,
@@ -30,7 +29,7 @@ const bloodBankSchema = new mongoose.Schema({
       type: String,
       required: true,
     }
-  }
+  
 });
 
 const bloodBankModel = mongoose.model("BloodBank", bloodBankSchema);

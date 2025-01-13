@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 // Define the form schema using Zod
 const formSchema = z.object({
@@ -35,8 +34,6 @@ export default function DonorForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
-
-  const navigate = useNavigate(); // Initialize useNavigate
 
   // State to store the form values
   const [donorInput, setDonorInput] = useState({
@@ -77,11 +74,6 @@ export default function DonorForm() {
           </code>
         </pre>
       );
-
-      // Redirect to the home page after 3 seconds
-      setTimeout(() => {
-        navigate("/"); // Replace with your home page URL
-      }, 3000);
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
@@ -243,29 +235,31 @@ export default function DonorForm() {
               name="name_8219849486"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex">Contact Number</FormLabel>
+                  <FormLabel className="flex">Contact No.</FormLabel>
                   <FormControl>
                     <Input
                       className="shadow hover:shadow-lg"
-                      placeholder="XXXXXXXXXX"
-                      type="tel"
+                      placeholder="1234567890"
+                      type="text"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>Enter a valid contact number</FormDescription>
+                  <FormDescription>
+                    This is your public display contact No. Please enter your
+                    contact number
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <div className="flex justify-center mt-4">
-              <Button
-                className="w-full py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600"
-                type="submit"
-              >
-                Register
-              </Button>
-            </div>
+            {/* Submit Button */}
+            <Button
+              className="min-w-40 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg"
+              type="submit"
+            >
+              Submit
+            </Button>
           </form>
         </Form>
       </div>
