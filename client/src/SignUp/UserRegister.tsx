@@ -1,10 +1,10 @@
-"use client";
-
-import { toast } from "sonner";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import axios from "axios"; // Import Axios
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,26 +16,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useState, useEffect } from "react";
 
-// Define the form schema using Zod
 const formSchema = z.object({
   name_6544930115: z.string().min(8),
   name_5062014857: z.string(),
-  name_6037749245: z.string().email(), // Ensure it's a valid email
+  name_6037749245: z.string().email(),
   name_7157177887: z.string(),
   name_9230315876: z.string(),
-  name_8219849486: z
-    .string()
-    .regex(/^\d{10}$/, "Contact number must be exactly 10 digits"), // Adjusted to ensure it's a valid phone number
+  name_8219849486: z.string().regex(/^\d{10}$/, "Contact number must be exactly 10 digits"),
 });
 
 export default function DonorForm() {
+  const navigate = useNavigate();
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  // State to store the form values
   const [donorInput, setDonorInput] = useState({
     name: "",
     email: "",
@@ -45,7 +42,6 @@ export default function DonorForm() {
     subdivision: "",
   });
 
-  // Effect hook to update donorInput state whenever form values change
   useEffect(() => {
     setDonorInput({
       name: form.getValues("name_6544930115"),
@@ -55,29 +51,37 @@ export default function DonorForm() {
       bloodType: form.getValues("name_7157177887"),
       subdivision: form.getValues("name_5062014857"),
     });
-  }, [form.watch()]); // Watch for form value changes
+  }, [form.watch()]);
 
-  // On form submit
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // Send the donorInput state as the request payload
       const response = await axios.post(
         "http://localhost:3000/blooddonor/signup",
         donorInput
       );
-      console.log(response.data); // Log the response data for debugging
-
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">
-            {JSON.stringify(response.data, null, 2)}
-          </code>
-        </pre>
-      );
+      console.log(response.data);
+      toast.success("Registration successful!");
+      setIsSubmitted(true);
+      
+      // Redirect to home page after 3 seconds
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
     }
+  }
+
+  if (isSubmitted) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="bg-white border border-gray-300 rounded-lg shadow-xl p-6 w-full max-w-2xl text-center">
+          <h2 className="text-2xl font-semibold mb-4">Successfully Signed In!</h2>
+          <p>Redirecting to home page in 3 seconds...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -118,7 +122,7 @@ export default function DonorForm() {
                   <FormLabel className="flex">Address</FormLabel>
                   <FormControl>
                     <select
-                      className="w-full  shadow hover:shadow-lg border rounded-md p-1.5"
+                      className="w-full shadow hover:shadow-lg border rounded-md p-1.5"
                       {...field}
                     >
                       <option value="">Select your Sub-Division</option>
@@ -143,7 +147,7 @@ export default function DonorForm() {
                       <option value="Salema">Salema</option>
                       <option value="Gandacherra">Gandacherra</option>
                       <option value="Chawmanu">Chawmanu</option>
-                      <option value="Chawmanu">Sadar</option>
+                      <option value="Sadar">Sadar</option>
                     </select>
                   </FormControl>
                   <FormDescription>
@@ -187,7 +191,7 @@ export default function DonorForm() {
                       <FormLabel className="flex">Blood Group</FormLabel>
                       <FormControl>
                         <select
-                          className="w-full  shadow hover:shadow-lg border rounded-md p-1.5"
+                          className="w-full shadow hover:shadow-lg border rounded-md p-1.5"
                           {...field}
                         >
                           <option value="">Select Blood Group</option>
@@ -209,7 +213,6 @@ export default function DonorForm() {
               </div>
             </div>
 
-            {/* Password Field */}
             <FormField
               control={form.control}
               name="name_9230315876"
@@ -230,7 +233,6 @@ export default function DonorForm() {
               )}
             />
 
-            {/* Contact Number Field */}
             <FormField
               control={form.control}
               name="name_8219849486"
@@ -254,7 +256,6 @@ export default function DonorForm() {
               )}
             />
 
-            {/* Submit Button */}
             <Button
               className="min-w-40 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg"
               type="submit"
@@ -267,3 +268,4 @@ export default function DonorForm() {
     </div>
   );
 }
+

@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import Layout from './components/Layout';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -30,6 +31,7 @@ function App() {
     <Router>
       <ErrorBoundary>
         <Layout>
+          <Toaster position="top-center" />
           <Suspense fallback={<LoadingSpinner />}>
             <Routes>
               {routes.map((route) => (
