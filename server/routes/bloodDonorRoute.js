@@ -7,9 +7,9 @@ import fetch from "node-fetch";
 const bloodDonorRoute = express.Router();
 
 // Geocode location function
-const geocodeLocation = async (district, state) => {
-  const geocodeURL = `https://nominatim.openstreetmap.org/search?district=${encodeURIComponent(
-    district
+const geocodeLocation = async (subdivision, state) => {
+  const geocodeURL = `https://nominatim.openstreetmap.org/search?subdivision=${encodeURIComponent(
+    subdivision
   )}&state=${encodeURIComponent(state)}&country=USA&format=json`;
 
   try {
@@ -19,7 +19,7 @@ const geocodeLocation = async (district, state) => {
       const { lat, lon } = data[0];
       return { latitude: parseFloat(lat), longitude: parseFloat(lon) };
     } else {
-      console.error(`Geocoding failed for ${district}, ${state}`);
+      console.error(`Geocoding failed for ${subdivision}, ${state}`);
       return null;
     }
   } catch (error) {
@@ -36,10 +36,9 @@ bloodDonorRoute.post("/signup", async (req, res) => {
       email,
       password,
       number,
-      state,
-      district,
+      subdivision,
       bloodType,
-      lastDonated,
+      lastDonated = Date.now,
       eligibility,
     } = req.body;
 
@@ -49,8 +48,7 @@ bloodDonorRoute.post("/signup", async (req, res) => {
       email: z.string().min(3).max(100).email(),
       password: z.string().min(3).max(100),
       number: z.string().regex(/^\d{10}$/, "Enter a valid 10-digit phone number"),
-      state: z.string().min(2).max(100),
-      district: z.string().min(2).max(100),
+      subdivision: z.string().min(2).max(100),
     });
 
     const validation = requiredBody.safeParse(req.body);
@@ -64,8 +62,7 @@ bloodDonorRoute.post("/signup", async (req, res) => {
       email,
       password: hashedPassword,
       number,
-      state,
-      district,
+      subdivision,
       bloodType,
       lastDonated,
       eligibility,
@@ -77,7 +74,7 @@ bloodDonorRoute.post("/signup", async (req, res) => {
         id: donor._id,
         name: donor.name,
         email: donor.email,
-        address: { state: donor.state, district: donor.district },
+        address: { state: donor.state, subdivision: donor.subdivision },
       },
     });
   } catch (error) {
@@ -89,12 +86,12 @@ bloodDonorRoute.post("/signup", async (req, res) => {
 // Route to find donors
 bloodDonorRoute.post("/find-donors", async (req, res) => {
   try {
-    const { state, district, bloodType } = req.body;
+    const { state, subdivision, bloodType } = req.body;
 
     // Validate input using Zod
     const inputSchema = z.object({
       state: z.string().min(2).max(100),
-      district: z.string().min(2).max(100),
+      subdivision: z.string().min(2).max(100),
       bloodType: z.string().min(2).max(10),
     });
 
@@ -103,7 +100,7 @@ bloodDonorRoute.post("/find-donors", async (req, res) => {
       return res.status(400).json({ error: "Invalid input data", details: validation.error });
     }
 
-    const userLocation = await geocodeLocation(district, state);
+    const userLocation = await geocodeLocation(subdivision, state);
     if (!userLocation) {
       return res.status(400).json({ error: "Invalid location. Unable to geocode." });
     }
@@ -111,7 +108,7 @@ bloodDonorRoute.post("/find-donors", async (req, res) => {
     const donors = await bloodDonorModel.find({
       bloodType,
       state,
-      district,
+      subdivision,
     });
 
     if (donors.length === 0) {

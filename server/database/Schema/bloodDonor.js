@@ -32,14 +32,15 @@ const bloodDonorSchema = new mongoose.Schema({
         default:false
     },
     lastDonated:{
-        type:String,
-        default:null
+        type:Date,
+        default:Date.now
     },
-    address:{
-        type:{
-            state:String,
-            District:String
-        }
+    state:{
+        type:String,
+        default:"Tripura"
+    },
+    subdivision:{
+        type:String,
     }
     // latitude: {
     //     type: Number,

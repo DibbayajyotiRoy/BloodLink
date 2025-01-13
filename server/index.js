@@ -14,6 +14,7 @@ import { bloodBankRoute } from "./routes/bloodBankRoute.js";
 import { bloodDonorRoute } from "./routes/bloodDonorRoute.js";
 // just a random comment
 const app = express();
+app.use(cors())
 app.use(express.json());
 app.use("/bloodbank", bloodBankRoute);
 app.use("/blooddonor", bloodDonorRoute);
@@ -21,22 +22,23 @@ app.use("/blooddonor", bloodDonorRoute);
 const PORT = process.env.PORT || 3000;
 
 //CORS Configuration
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "X-Requested-With",
-      "device-remember-token",
-      "Access-Control-Allow-Origin",
-      "Origin",
-      "Accept",
-    ],
-  })
-);
+// app.use(
+//   cors({
+//     origin: process.env.CLIENT_URL || "http://localhost:5173",
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
+//     allowedHeaders: [
+//       "Content-Type",
+//       "Authorization",
+//       "X-Requested-With",
+//       "device-remember-token",
+//       "Access-Control-Allow-Origin",
+//       "Origin",
+//       "Accept",
+//     ],
+//   })
+// );
+
 
 // Body Parser Middleware
 app.use(express.json({ limit: "10kb" }));

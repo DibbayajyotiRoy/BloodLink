@@ -16,6 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 // Define the form schema using Zod
 const formSchema = z.object({
@@ -24,7 +26,9 @@ const formSchema = z.object({
   name_6037749245: z.string().email(), // Ensure it's a valid email
   name_7157177887: z.string(),
   name_9230315876: z.string(),
-  name_8219849486: z.number().min(1000000000).max(9999999999), // Adjusted to ensure it's a valid phone number
+  name_8219849486: z
+    .string()
+    .regex(/^\d{10}$/, "Contact number must be exactly 10 digits"), // Adjusted to ensure it's a valid phone number
 });
 
 export default function DonorForm() {
@@ -32,12 +36,37 @@ export default function DonorForm() {
     resolver: zodResolver(formSchema),
   });
 
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  // State to store the form values
+  const [donorInput, setDonorInput] = useState({
+    name: "",
+    email: "",
+    password: "",
+    number: "",
+    bloodType: "",
+    subdivision: "",
+  });
+
+  // Effect hook to update donorInput state whenever form values change
+  useEffect(() => {
+    setDonorInput({
+      name: form.getValues("name_6544930115"),
+      email: form.getValues("name_6037749245"),
+      password: form.getValues("name_9230315876"),
+      number: form.getValues("name_8219849486"),
+      bloodType: form.getValues("name_7157177887"),
+      subdivision: form.getValues("name_5062014857"),
+    });
+  }, [form.watch()]); // Watch for form value changes
+
+  // On form submit
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // Send a POST request to the API endpoint
+      // Send the donorInput state as the request payload
       const response = await axios.post(
-        "http://localhost:3000/api/blooddonor/signup",
-        values
+        "http://localhost:3000/blooddonor/signup",
+        donorInput
       );
       console.log(response.data); // Log the response data for debugging
 
@@ -48,6 +77,11 @@ export default function DonorForm() {
           </code>
         </pre>
       );
+
+      // Redirect to the home page after 3 seconds
+      setTimeout(() => {
+        navigate("/"); // Replace with your home page URL
+      }, 3000);
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
@@ -209,31 +243,29 @@ export default function DonorForm() {
               name="name_8219849486"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex">Contact No.</FormLabel>
+                  <FormLabel className="flex">Contact Number</FormLabel>
                   <FormControl>
                     <Input
                       className="shadow hover:shadow-lg"
-                      placeholder="1234567890"
-                      type="number"
+                      placeholder="XXXXXXXXXX"
+                      type="tel"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display contact No. Please enter your
-                    contact number
-                  </FormDescription>
+                  <FormDescription>Enter a valid contact number</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            {/* Submit Button */}
-            <Button
-              className="min-w-40 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg"
-              type="submit"
-            >
-              Submit
-            </Button>
+            <div className="flex justify-center mt-4">
+              <Button
+                className="w-full py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600"
+                type="submit"
+              >
+                Register
+              </Button>
+            </div>
           </form>
         </Form>
       </div>
