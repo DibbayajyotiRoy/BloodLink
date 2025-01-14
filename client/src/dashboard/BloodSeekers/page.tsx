@@ -283,30 +283,44 @@ const BloodSeekersPage = () => {
         )}
 
 {activeSection === "banks" && (
-  <div>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     {filteredBanks.length === 0 ? (
       <p>No blood banks found matching your criteria.</p>
     ) : (
-      <table className="table-auto border-collapse border border-gray-300 w-full  rounded-lg">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border border-gray-300 px-4 py-2 text-center">Name</th>
-            <th className="border border-gray-300 px-4 py-2 text-center">District</th>
-            <th className="border border-gray-300 px-4 py-2 text-center">Email</th>
-            <th className="border border-gray-300 px-4 py-2 text-center">Contact</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredBanks.map((bank) => (
-            <tr key={bank.id} className="odd:bg-white even:bg-slate-50">
-              <td className=" border border-gray-300 px-4 py-2">{bank.name}</td>
-              <td className=" border border-gray-300 px-4 py-2">{bank.district}</td>
-              <td className=" border border-gray-300 px-4 py-2">{bank.email}</td>
-              <td className=" border border-gray-300 px-4 py-2">{bank.number}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      // <table className="table-auto border-collapse border border-gray-300 w-full  rounded-lg">
+      //   <thead>
+      //     <tr className="bg-gray-100">
+      //       <th className="border border-gray-300 px-4 py-2 text-center">Name</th>
+      //       <th className="border border-gray-300 px-4 py-2 text-center">District</th>
+      //       <th className="border border-gray-300 px-4 py-2 text-center">Email</th>
+      //       <th className="border border-gray-300 px-4 py-2 text-center">Contact</th>
+      //     </tr>
+      //   </thead>
+      //   <tbody>
+      //     {filteredBanks.map((bank) => (
+      //       <tr key={bank.id} className="odd:bg-white even:bg-slate-50">
+      //         <td className=" border border-gray-300 px-4 py-2">{bank.name}</td>
+      //         <td className=" border border-gray-300 px-4 py-2">{bank.district}</td>
+      //         <td className=" border border-gray-300 px-4 py-2">{bank.email}</td>
+      //         <td className=" border border-gray-300 px-4 py-2">{bank.number}</td>
+      //       </tr>
+      //     ))}
+      //   </tbody>
+      // </table>
+      filteredBanks.map((bank) => (
+        <div key={bank.id} className="mb-5 border-2 border-gray-200 rounded-lg p-4 shadow-md bg-white hover:shadow-xl  transition duration-300 ease-in-out">
+          <h2 className="font-bold text-lg">{bank.name}</h2>
+          <p>Location: {bank.district}</p>
+          <p>Email: {bank.email}</p>
+          <p>Contact: {bank.number}</p>
+          <Button
+            className="mt-2"
+            onClick={() => navigate(`/profile/${bank.id}`)}
+          >
+            View Profile
+          </Button>
+        </div>
+      ))
     )}
   </div>
 )}
