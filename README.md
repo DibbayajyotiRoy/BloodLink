@@ -18,16 +18,10 @@ Blood Link is a web platform designed to connect individuals in need of blood wi
 4. **User-Friendly Interface**:
    - A simple and intuitive interface for searching donors, registering as a donor, and finding blood banks.
 
-5. **Emergency Alerts**:
-   - Users can set up alerts for specific blood types needed in emergencies, ensuring timely notifications for potential donors.
-
-6. **User Profiles**:
+5. **User Profiles**:
    - Users can create profiles to manage their donor status, update personal information, and track donation history.
 
-7. **Admin Dashboard**:
-   - An admin panel for managing donor registrations, monitoring requests for blood, and updating bank information.
-
-8. **Mobile Responsiveness**:
+6. **Mobile Responsiveness**:
    - The website is optimized for mobile devices, allowing users to access services on the go.
 
 ## Getting Started
