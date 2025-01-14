@@ -187,31 +187,15 @@ const BloodSeekersPage = () => {
           onChange={(e) => setBankLocation(e.target.value)}
           className="border rounded p-2 shadow hover:shadow-lg w-full sm:w-76"
         >
-          <option value="">Select your Sub-Division</option>
-          <option value="Sadar">Sadar</option>
-          <option value="Mohanpur">Mohanpur</option>
-          <option value="Jirania">Jirania</option>
-          <option value="Belonia">Belonia</option>
-          <option value="Santirbazar">Santirbazar</option>
-          <option value="Sabroom">Sabroom</option>
-          <option value="Udaipur">Udaipur</option>
-          <option value="Amarpur">Amarpur</option>
-          <option value="Karbook">Karbook</option>
+          <option value="">Select your District</option>
+          <option value="Dhalai">Dhalai</option>
+          <option value="Gomati">Gomati</option>
           <option value="Khowai">Khowai</option>
-          <option value="Teliamura">Teliamura</option>
-          <option value="Bishalgarh">Bishalgarh</option>
-          <option value="Jampuijala">Jampuijala</option>
-          <option value="Sonamura">Sonamura</option>
-          <option value="Kumarghat">Kumarghat</option>
-          <option value="Kailashahar">Kailashahar</option>
-          <option value="Dharmanagar">Dharmanagar</option>
-          <option value="Kanchanpur">Kanchanpur</option>
-          <option value="Panisagar">Panisagar</option>
-          <option value="Ambassa">Ambassa</option>
-          <option value="Kamalpur">Kamalpur</option>
-          <option value="Longtarai Valley">Longtarai Valley</option>
-          <option value="Gandachera">Gandachera</option>
-
+          <option value="North_Tripura">North Tripura</option>
+          <option value="Sepahijala">Sepahijala</option>
+          <option value="South_Tripura">South Tripura</option>
+          <option value="Unakoti">Unakoti</option>
+          <option value="West_Tripura">West Tripura</option>
         </select>
       );
     }
@@ -303,22 +287,22 @@ const BloodSeekersPage = () => {
     {filteredBanks.length === 0 ? (
       <p>No blood banks found matching your criteria.</p>
     ) : (
-      <table className="table-auto border-collapse border border-gray-300 w-full">
+      <table className="table-auto border-collapse border border-gray-300 w-full  rounded-lg">
         <thead>
           <tr className="bg-gray-100">
-            <th className="border border-gray-300 px-4 py-2 text-left">Name</th>
-            <th className="border border-gray-300 px-4 py-2 text-left">Location</th>
-            <th className="border border-gray-300 px-4 py-2 text-left">Email</th>
-            <th className="border border-gray-300 px-4 py-2 text-left">Contact</th>
+            <th className="border border-gray-300 px-4 py-2 text-center">Name</th>
+            <th className="border border-gray-300 px-4 py-2 text-center">District</th>
+            <th className="border border-gray-300 px-4 py-2 text-center">Email</th>
+            <th className="border border-gray-300 px-4 py-2 text-center">Contact</th>
           </tr>
         </thead>
         <tbody>
           {filteredBanks.map((bank) => (
-            <tr key={bank.id} className="hover:bg-gray-50">
-              <td className="border border-gray-300 px-4 py-2">{bank.name}</td>
-              <td className="border border-gray-300 px-4 py-2">{bank.district}</td>
-              <td className="border border-gray-300 px-4 py-2">{bank.email}</td>
-              <td className="border border-gray-300 px-4 py-2">{bank.number}</td>
+            <tr key={bank.id} className="odd:bg-white even:bg-slate-50">
+              <td className=" border border-gray-300 px-4 py-2">{bank.name}</td>
+              <td className=" border border-gray-300 px-4 py-2">{bank.district}</td>
+              <td className=" border border-gray-300 px-4 py-2">{bank.email}</td>
+              <td className=" border border-gray-300 px-4 py-2">{bank.number}</td>
             </tr>
           ))}
         </tbody>
