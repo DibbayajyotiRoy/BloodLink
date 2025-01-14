@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 const JWT_SECRET = 'BloodLink'
 
 import { bloodBankModel } from '../database/Schema/bloodBank.js'
+import { bloodQuantityModel } from '../database/Schema/bloodQuantity.js'
 import {bloodBankAuth} from '../middlewares/bloodBankAuth.js'
 
 const bloodBankRoute = express.Router()
@@ -148,10 +149,66 @@ bloodBankRoute.post('/find-banks', async (req,res)=>{
       res.status(200).json({ banks });
 })
 
-bloodBankRoute.post('/add-bloods', bloodBankAuth, async (req, res) =>{
-    res.send({
-        message:"working fine"
-    })
-})
+
+// Route to add or update blood quantities
+bloodBankRoute.post("/add-bloods", bloodBankAuth, async (req, res) => {
+  const {
+    A_positive,
+    A_negative,
+    B_positive,
+    B_negative,
+    O_positive,
+    O_negative,
+    AB_positive,
+    AB_negative,
+  } = req.body;
+
+  const bloodBankId = req.id; // `bloodBankAuth` middleware attaches this ID to `req.id`
+
+  try {
+    // Check if a record for this blood bank already exists
+    const existingRecord = await bloodQuantityModel.findOne({ bloodBank: bloodBankId });
+
+    if (existingRecord) {
+      // Update existing quantities
+      existingRecord.quantities = {
+        A_positive,
+        A_negative,
+        B_positive,
+        B_negative,
+        O_positive,
+        O_negative,
+        AB_positive,
+        AB_negative,
+      };
+      existingRecord.lastUpdated = Date.now();
+
+      await existingRecord.save();
+      return res.status(200).send({ message: "Blood quantities updated successfully." });
+    }
+
+    // Create a new record if it doesn't exist
+    const newRecord = new bloodQuantityModel({
+      bloodBank: bloodBankId,
+      quantities: {
+        A_positive,
+        A_negative,
+        B_positive,
+        B_negative,
+        O_positive,
+        O_negative,
+        AB_positive,
+        AB_negative,
+      },
+    });
+
+    await newRecord.save();
+    res.status(201).send({ message: "Blood quantities added successfully." });
+  } catch (error) {
+    console.error("Error in /add-bloods:", error);
+    res.status(500).send({ error: "An error occurred while processing your request." });
+  }
+});
+
 
 export {bloodBankRoute}

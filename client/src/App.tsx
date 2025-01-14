@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './components/AuthContext';
 import Layout from './components/Layout';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -25,27 +26,30 @@ const routes = [
   { path: '/dashboard', element: <BloodBankDashboard /> },
   { path: '/404', element: <NotFound /> },
   { path: '/login', element: <Login /> },
-  { path: '/profile/:id', element: <ProfilePage /> }, // Add profile route with dynamic id parameter
+  { path: '/profile/:id', element: <ProfilePage /> },
 ];
 
 function App() {
   return (
-    <Router>
-      <ErrorBoundary>
-        <Layout>
-          <Toaster position="top-center" />
-          <Suspense fallback={<LoadingSpinner />}>
-            <Routes>
-              {routes.map((route) => (
-                <Route key={route.path} path={route.path} element={route.element} />
-              ))}
-              <Route path="*" element={<Navigate replace to="/404" />} />
-            </Routes>
-          </Suspense>
-        </Layout>
-      </ErrorBoundary>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <ErrorBoundary>
+          <Layout>
+            <Toaster position="top-center" />
+            <Suspense fallback={<LoadingSpinner />}>
+              <Routes>
+                {routes.map((route) => (
+                  <Route key={route.path} path={route.path} element={route.element} />
+                ))}
+                <Route path="*" element={<Navigate replace to="/404" />} />
+              </Routes>
+            </Suspense>
+          </Layout>
+        </ErrorBoundary>
+      </Router>
+    </AuthProvider>
   );
 }
 
 export default App;
+

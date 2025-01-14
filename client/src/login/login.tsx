@@ -44,9 +44,10 @@ export default function Login() {
 
       // Save the token in localStorage or sessionStorage
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userType", "bloodBank"); // Assuming the user is a blood bank
 
       // Redirect to BloodBankDashboard after successful login
-      navigate("/dashboard");
+      navigate("/dashboard"); // Navigates directly to the dashboard
       toast.success("Login successful!");
     } catch (error) {
       console.error("Form submission error", error);
@@ -57,9 +58,7 @@ export default function Login() {
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="bg-white border border-gray-300 rounded-lg shadow-xl p-6 w-full max-w-2xl">
-        <h2 className="text-2xl font-semibold text-center mb-6">
-          Login
-        </h2>
+        <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField

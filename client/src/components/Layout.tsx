@@ -1,14 +1,8 @@
-import React from "react";
-import { useLocation, Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 import { cn } from "@/lib/utils";
-import {
-  BarChart3,
-  Heart,
-  Home,
-  LogIn,
-  Menu,
-  User,
-} from "lucide-react";
+import { BarChart3, Heart, Home, LogIn, Menu, User } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -53,13 +47,22 @@ const authNavItems: NavItem[] = [
   }
 ];
 
+const bloodBankNavItems: NavItem[] = [
+  {
+    label: "Profile",
+    href: "/profile",
+    icon: <User className="h-4 w-4" />
+  }
+];
+
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, isBloodBank, logout } = useAuth();
 
   const NavLink: React.FC<{ item: NavItem }> = ({ item }) => {
     const isActive = location.pathname === item.href;
@@ -82,19 +85,45 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const NavItems = () => (
-    <>
-      <nav className="space-y-1">
-        {mainNavItems.map((item) => (
-          <NavLink key={item.href} item={item} />
-        ))}
-      </nav>
+    <nav className="space-y-1">
+      {mainNavItems.map((item) => (
+        <NavLink key={item.href} item={item} />
+      ))}
       <hr className="my-4" />
       <nav className="space-y-1">
-        {authNavItems.map((item) => (
-          <NavLink key={item.href} item={item} />
-        ))}
+        {isAuthenticated ? (
+          <>
+            {isBloodBank ? (
+              // If it's a Blood Bank user, show Profile
+              bloodBankNavItems.map((item) => (
+                <NavLink key={item.href} item={item} />
+              ))
+            ) : (
+              // If it's not a Blood Bank, show donor-related nav items (profile)
+              <NavLink
+                key="/profile"
+                item={{ label: "Profile", href: "/profile", icon: <User className="h-4 w-4" /> }}
+              />
+            )}
+            {/* Render Logout Button only once */}
+            <Button
+              onClick={() => {
+                logout();
+                setIsOpen(false);
+              }}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md w-full justify-start"
+            >
+              <LogIn className="h-4 w-4" />
+              Logout
+            </Button>
+          </>
+        ) : (
+          authNavItems.map((item) => (
+            <NavLink key={item.href} item={item} />
+          ))
+        )}
       </nav>
-    </>
+    </nav>
   );
 
   return (
@@ -119,9 +148,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Desktop Navigation */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
         <div className="flex flex-col flex-grow border-r border-gray-200 bg-white pt-5 pb-4">
-          {/* <div className="flex items-center flex-shrink-0 px-4">
-            <h1 className="text-xl font-bold">BloodLink</h1>
-          </div> */}
           <div className="flex-grow flex flex-col mt-8 px-3">
             <NavItems />
           </div>

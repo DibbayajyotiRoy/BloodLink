@@ -1,11 +1,34 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Droplet, Heart, Users, ArrowRight } from 'lucide-react';
-import Footer from "../components/Footer.tsx"
+import { Droplet, Heart, Users, ArrowRight } from "lucide-react";
+import Footer from "../components/Footer.tsx";
+
+// Helper function to decode JWT token
+function decodeToken(token: string) {
+  const payload = token.split(".")[1];
+  return JSON.parse(atob(payload));
+}
 
 const LandingPage = () => {
+  const [bloodBankName, setBloodBankName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = decodeToken(token);
+        if (decodedToken && decodedToken.name) {
+          setBloodBankName(decodedToken.name);
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  }, []);
+
   return (
     <div className="flex flex-col h-screen min-h-screen bg-gradient-to-b from-red-50 to-white">
       {/* Top Navigation */}
@@ -15,17 +38,26 @@ const LandingPage = () => {
             <Droplet className="h-8 w-8 text-red-600" />
             <span className="text-2xl font-bold text-gray-800">BloodLink</span>
           </Link>
-          {/* <nav className="hidden md:flex space-x-4">
-            <Link to="/about" className="text-gray-600 hover:text-gray-800 transition">About</Link>
-            <Link to="/bloodseekers" className="text-gray-600 hover:text-gray-800 transition">Find Blood</Link>
-          </nav> */}
           <div className="flex space-x-2">
-            <Link to="/register/blood-bank">
-              <Button variant="outline" className="hidden md:inline-flex">Register as Blood Bank</Button>
-            </Link>
-            <Link to="/register/donor">
-              <Button className="bg-red-600 hover:bg-red-700 text-white">Become a Donor</Button>
-            </Link>
+            {bloodBankName ? (
+              <div className="flex items-center space-x-2">
+                <Droplet className="h-5 w-5 text-red-600" />
+                <span className="text-gray-700 font-semibold">{bloodBankName}</span>
+              </div>
+            ) : (
+              <>
+                <Link to="/register/blood-bank">
+                  <Button variant="outline" className="hidden md:inline-flex">
+                    Register as Blood Bank
+                  </Button>
+                </Link>
+                <Link to="/register/donor">
+                  <Button className="bg-red-600 hover:bg-red-700 text-white">
+                    Become a Donor
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -54,9 +86,9 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="md:w-1/2">
-            <img 
-              src="https://i.pinimg.com/1200x/14/8d/ef/148def07f994486fb660fbc48ba24823.jpg" 
-              alt="Blood Donation Illustration" 
+            <img
+              src="https://i.pinimg.com/1200x/14/8d/ef/148def07f994486fb660fbc48ba24823.jpg"
+              alt="Blood Donation Illustration"
               className="w-full max-w-md mx-auto rounded-lg shadow-lg"
             />
           </div>
@@ -67,17 +99,17 @@ const LandingPage = () => {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">Why Donate Blood?</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <FeatureCard 
+              <FeatureCard
                 icon={<Heart className="h-12 w-12 text-red-600" />}
                 title="Save Lives"
                 description="Your donation can save up to 3 lives with a single pint of blood."
               />
-              <FeatureCard 
+              <FeatureCard
                 icon={<Droplet className="h-12 w-12 text-red-600" />}
                 title="Always Needed"
                 description="Every 2 seconds, someone in the world needs blood."
               />
-              <FeatureCard 
+              <FeatureCard
                 icon={<Users className="h-12 w-12 text-red-600" />}
                 title="Community Impact"
                 description="Strengthen your community by helping those in urgent need."
@@ -100,31 +132,10 @@ const LandingPage = () => {
         </section>
       </main>
 
-      {/* Footer */}
-      {/* <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-4 md:mb-0">
-              <h3 className="text-2xl font-bold">BloodLink</h3>
-              <p className="text-gray-400">Connecting donors to save lives</p>
-            </div>
-            <nav className="flex flex-wrap justify-center md:justify-end space-x-4">
-              <Link to="/about" className="hover:text-red-400 transition">About</Link>
-              <Link to="/contact" className="hover:text-red-400 transition">Contact</Link>
-              <Link to="/privacy" className="hover:text-red-400 transition">Privacy Policy</Link>
-              <Link to="/terms" className="hover:text-red-400 transition">Terms of Service</Link>
-            </nav>
-          </div>
-          <div className="mt-8 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} BloodLink Blood Donation Platform. All rights reserved.</p>
-          </div>
-        </div>
-      </footer> */}
-      <Footer/>
+      <Footer />
     </div>
   );
 };
-
 
 interface FeatureCardProps {
   icon: React.ReactNode;
@@ -140,7 +151,4 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) =
   </div>
 );
 
-
-
 export default LandingPage;
-
