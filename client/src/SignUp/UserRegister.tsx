@@ -23,7 +23,9 @@ const formSchema = z.object({
   name_6037749245: z.string().email(),
   name_7157177887: z.string(),
   name_9230315876: z.string(),
-  name_8219849486: z.string().regex(/^\d{10}$/, "Contact number must be exactly 10 digits"),
+  name_8219849486: z
+    .string()
+    .regex(/^\d{10}$/, "Contact number must be exactly 10 digits"),
 });
 
 export default function DonorForm() {
@@ -62,27 +64,35 @@ export default function DonorForm() {
       console.log(response.data);
       toast.success("Registration successful!");
       setIsSubmitted(true);
-      
+
+      // navigate("/bloodseekers")
+
       // Redirect to home page after 3 seconds
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
+      // setTimeout(() => {
+      //   navigate("/bloodseekers");
+      // }, 3000);
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
     }
   }
 
-  if (isSubmitted) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="bg-white border border-gray-300 rounded-lg shadow-xl p-6 w-full max-w-2xl text-center">
-          <h2 className="text-2xl font-semibold mb-4">Successfully Signed In!</h2>
-          <p>Redirecting to home page in 3 seconds...</p>
-        </div>
-      </div>
-    );
+  if(isSubmitted){
+    navigate("/bloodseekers")
   }
+
+  // if (isSubmitted) {
+  //   return (
+  //     <div className="flex justify-center items-center min-h-screen">
+  //       <div className="bg-white border border-gray-300 rounded-lg shadow-xl p-6 w-full max-w-2xl text-center">
+  //         <h2 className="text-2xl font-semibold mb-4">
+  //           Successfully Signed In!
+  //         </h2>
+  //         <p>Redirecting to home page in 3 seconds...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -126,28 +136,31 @@ export default function DonorForm() {
                       {...field}
                     >
                       <option value="">Select your Sub-Division</option>
-                      <option value="Dukli">Dukli</option>
-                      <option value="Jirania">Jirania</option>
-                      <option value="Mohanpur">Mohanpur</option>
-                      <option value="Mandwi">Mandwi</option>
+                      <option value="Kamalpur">Kamalpur</option>
+                      <option value="Ambassa">Ambassa</option>
+                      <option value="Longtharai_Valley">
+                        Longtharai Valley
+                      </option>
+                      <option value="Gandachera">Gandachera</option>
+                      <option value="Udaipur">Udaipur</option>
+                      <option value="Amarpur">Amarpur</option>
+                      <option value="Karbook">Karbook</option>
                       <option value="Khowai">Khowai</option>
                       <option value="Teliamura">Teliamura</option>
-                      <option value="Tulasikhar">Tulasikhar</option>
                       <option value="Bishalgarh">Bishalgarh</option>
-                      <option value="Melaghar">Melaghar</option>
-                      <option value="Matabari">Matabari</option>
-                      <option value="Amarpur">Amarpur</option>
-                      <option value="Rajnagar">Rajnagar</option>
-                      <option value="Bakafa">Bakafa</option>
-                      <option value="Satchand">Satchand</option>
-                      <option value="Rupaichari">Rupaichari</option>
-                      <option value="Kadamtala">Kadamtala</option>
+                      <option value="Jampuijala">Jampuijala</option>
+                      <option value="Sonamura">Sonamura</option>
+                      <option value="Kumarghat">Kumarghat</option>
+                      <option value="Kailashahar">Kailashahar</option>
+                      <option value="Dharmanagar">Dharmanagar</option>
                       <option value="Kanchanpur">Kanchanpur</option>
                       <option value="Panisagar">Panisagar</option>
-                      <option value="Salema">Salema</option>
-                      <option value="Gandacherra">Gandacherra</option>
-                      <option value="Chawmanu">Chawmanu</option>
+                      <option value="Santirbazar">Santirbazar</option>
+                      <option value="Belonia">Belonia</option>
+                      <option value="Sabroom">Sabroom</option>
                       <option value="Sadar">Sadar</option>
+                      <option value="Mohanpur">Mohanpur</option>
+                      <option value="Jirania">Jirania</option>
                     </select>
                   </FormControl>
                   <FormDescription>
@@ -268,4 +281,3 @@ export default function DonorForm() {
     </div>
   );
 }
-
