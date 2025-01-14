@@ -59,7 +59,7 @@ Start the server (Express):
 
 Start the client (React):
 
-**Technologies Used**
+##Technologies Used
 
 Frontend: React, TypeScript, Vite, Shadcn UI components
 
@@ -70,7 +70,7 @@ State Management: React Hook Form for form handling and validation using Zod.
 Notifications: React Hot Toast for user feedback on actions.
 
 
-**Contribution**
+##Contribution
 
 This project was developed by the following team members:
 Dibbayajyoti Roy (Frontend)
@@ -79,7 +79,7 @@ Nirupam Pal (Frontend)
 Kalpita Roy (Backend)
 
 
-**License**
+##License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 
