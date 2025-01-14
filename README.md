@@ -59,7 +59,7 @@ Start the server (Express):
 
 Start the client (React):
 
-##Technologies Used
+## Technologies Used
 
 Frontend: React, TypeScript, Vite, Shadcn UI components
 
