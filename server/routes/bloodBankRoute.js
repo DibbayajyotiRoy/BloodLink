@@ -70,9 +70,10 @@ bloodBankRoute.post('/signup', async (req,res)=>{
 
 bloodBankRoute.post('/signin', async (req,res)=>{
     try {
-        const {email , password} = req.body
+        const {name , password} = req.body
+        console.log(name,password)
         const requiredBody = z.object({   
-            email:z.string().min(3).max(100).email(),   
+            name:z.string().min(3).max(100),   
             password:z.string().min(3).max(100),              
         })
 
@@ -87,20 +88,20 @@ bloodBankRoute.post('/signin', async (req,res)=>{
 
         try {
             const user = await bloodBankModel.findOne({
-                email
+                name
             })
             const response = await bcrypt.compare(password , user.password)
 
             if(!response){
                 console.log(response)
                 res.status(404).json({
-                    message:"Invalid email or"
+                    message:"Invalid name or password"
                 })
                 return
             }
 
             const token = jwt.sign(
-                { id: user._id, email: user.email },
+                { id: user._id, name: user.name },
                 JWT_SECRET 
             );
 
@@ -147,7 +148,7 @@ bloodBankRoute.post('/find-banks', async (req,res)=>{
       res.status(200).json({ banks });
 })
 
-bloodBankRoute.post('/addblood', bloodBankAuth, async (req, res) =>{
+bloodBankRoute.post('/add-bloods', bloodBankAuth, async (req, res) =>{
     res.send({
         message:"working fine"
     })

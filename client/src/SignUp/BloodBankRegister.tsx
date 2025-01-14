@@ -7,7 +7,6 @@ import { toast } from "sonner"; // Assuming you use 'sonner' for notifications
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  
   FormControl,
   FormDescription,
   FormField,
@@ -15,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useNavigate } from "react-router-dom"; // Importing useNavigate
 
 // Define the validation schema using Zod
 const formSchema = z.object({
@@ -33,10 +33,14 @@ const BloodBankRegister: React.FC = () => {
     resolver: zodResolver(formSchema),
   });
 
+  const navigate = useNavigate(); // Hook to navigate after successful registration
+
   const onSubmit = async (data: FormData) => {
     try {
       const response = await axios.post("http://localhost:3000/bloodbank/signup", data);
       toast.success(response.data.message || "Successfully registered!");
+      // After successful registration, navigate to the login page
+      navigate("/login"); 
     } catch (error) {
       console.error("Registration error:", error);
       toast.error("Failed to register. Please try again.");
