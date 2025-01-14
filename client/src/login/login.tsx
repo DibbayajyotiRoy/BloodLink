@@ -16,34 +16,38 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom"; // Use useNavigate for redirection
 
 // Define the form schema using Zod
 const formSchema = z.object({
-  name_6544930115: z.string().min(8),
-  name_9230315876: z.string(),
+  username: z.string().min(8, "Username must be at least 8 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+  const navigate = useNavigate(); // Hook to navigate to another page
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       // Send a POST request to the API endpoint
       const response = await axios.post(
-        "http://localhost:3000/api/blooddonor/login",
-        values
+        "http://localhost:3000/bloodbank/signin",
+        {
+          name: values.username,
+          password: values.password, // Send username and password
+        }
       );
       console.log(response.data); // Log the response data for debugging
 
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">
-            {JSON.stringify(response.data, null, 2)}
-          </code>
-        </pre>
-      );
+      // Save the token in localStorage or sessionStorage
+      localStorage.setItem("token", response.data.token);
+
+      // Redirect to BloodBankDashboard after successful login
+      navigate("/dashboard");
+      toast.success("Login successful!");
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
@@ -60,49 +64,44 @@ export default function Login() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
-              name="name_6544930115"
+              name="username"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex">Username</FormLabel>
                   <FormControl>
                     <Input
                       className="shadow hover:shadow-lg"
-                      placeholder="Someone"
+                      placeholder="Enter username"
                       type="text"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Enter your username
-                  </FormDescription>
+                  <FormDescription>Enter your username</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-
             {/* Password Field */}
             <FormField
               control={form.control}
-              name="name_9230315876"
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex">Password</FormLabel>
                   <FormControl>
                     <Input
                       className="shadow hover:shadow-lg"
-                      placeholder="someone$123456"
+                      placeholder="Enter password"
                       type="password"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>Enter your Password</FormDescription>
+                  <FormDescription>Enter your password</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            
 
             {/* Submit Button */}
             <Button
