@@ -125,6 +125,28 @@ bloodBankRoute.post('/signin', async (req,res)=>{
     }
 })
 
+bloodBankRoute.post('/find-banks', async (req,res)=>{
+    const {subdivision} = req.body
+    
+    const query = {}
+
+    if(subdivision){
+        query.subdivision = subdivision
+    }
+
+    console.log(subdivision)
+    console.log(query)
+
+    const banks = await bloodBankModel.find(query)
+
+    if (banks.length === 0) {
+        return res.status(404).json({ message: "No banks found" });
+      }
+  
+      // Respond with the banks' data
+      res.status(200).json({ banks });
+})
+
 bloodBankRoute.post('/addblood', bloodBankAuth, async (req, res) =>{
     res.send({
         message:"working fine"

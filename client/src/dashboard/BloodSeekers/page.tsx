@@ -18,7 +18,7 @@ interface BloodDonor {
 interface BloodBank {
   id: number;
   name: string;
-  subdivision: string;
+  district: string;
   email: string;
   number: string;
   availableBloodTypes: string[];
@@ -56,14 +56,20 @@ const BloodSeekersPage = () => {
   };
 
   const fetchBanks = async () => {
+    
+    
+    
     try {
-      const response = await axios.get(
-        "http://localhost:3000/bloodbank/find-banks"
-      );
-      setBanks(response.data.banks);
-      setFilteredBanks(response.data.banks);
+      const response =await axios.post('http://localhost:3000/bloodbank/find-banks',{
+       state: "Tripura",
+       district: bankLocation}
+      )
+      setBanks(response.data.banks)
+      setFilteredBanks(response.data.banks)
+      console.log(banks)
     } catch (error) {
-      console.error("Error fetching banks:", error);
+      console.log(error)
+      return
     }
   };
 
@@ -95,7 +101,7 @@ const BloodSeekersPage = () => {
 
     if (bankLocation) {
       filtered = filtered.filter(
-        (bank) => bank.subdivision.toLowerCase() === bankLocation.toLowerCase()
+        (bank) => bank.district.toLowerCase() === bankLocation.toLowerCase()
       );
     }
 
@@ -130,10 +136,12 @@ const BloodSeekersPage = () => {
             className="border rounded p-2 shadow hover:shadow-lg w-full sm:w-76"
           >
             <option value="">Select your Sub-Division</option>
-            <option value="Kamalpur">Kamalpur</option>
-            <option value="Ambassa">Ambassa</option>
-            <option value="Longtharai_Valley">Longtharai Valley</option>
-            <option value="Gandachera">Gandachera</option>
+            <option value="Sadar">Sadar</option>
+            <option value="Mohanpur">Mohanpur</option>
+            <option value="Jirania">Jirania</option>
+            <option value="Belonia">Belonia</option>
+            <option value="Santirbazar">Santirbazar</option>
+            <option value="Sabroom">Sabroom</option>
             <option value="Udaipur">Udaipur</option>
             <option value="Amarpur">Amarpur</option>
             <option value="Karbook">Karbook</option>
@@ -147,12 +155,11 @@ const BloodSeekersPage = () => {
             <option value="Dharmanagar">Dharmanagar</option>
             <option value="Kanchanpur">Kanchanpur</option>
             <option value="Panisagar">Panisagar</option>
-            <option value="Santirbazar">Santirbazar</option>
-            <option value="Belonia">Belonia</option>
-            <option value="Sabroom">Sabroom</option>
-            <option value="Sadar">Sadar</option>
-            <option value="Mohanpur">Mohanpur</option>
-            <option value="Jirania">Jirania</option>
+            <option value="Ambassa">Ambassa</option>
+            <option value="Kamalpur">Kamalpur</option>
+            <option value="Longtarai Valley">Longtarai Valley</option>
+            <option value="Gandachera">Gandachera</option>
+
           </select>
           <select
             title="bloodType"
@@ -181,28 +188,30 @@ const BloodSeekersPage = () => {
           className="border rounded p-2 shadow hover:shadow-lg w-full sm:w-76"
         >
           <option value="">Select your Sub-Division</option>
-          <option value="Dukli">Dukli</option>
-          <option value="Jirania">Jirania</option>
+          <option value="Sadar">Sadar</option>
           <option value="Mohanpur">Mohanpur</option>
-          <option value="Mandwi">Mandwi</option>
+          <option value="Jirania">Jirania</option>
+          <option value="Belonia">Belonia</option>
+          <option value="Santirbazar">Santirbazar</option>
+          <option value="Sabroom">Sabroom</option>
+          <option value="Udaipur">Udaipur</option>
+          <option value="Amarpur">Amarpur</option>
+          <option value="Karbook">Karbook</option>
           <option value="Khowai">Khowai</option>
           <option value="Teliamura">Teliamura</option>
-          <option value="Tulasikhar">Tulasikhar</option>
           <option value="Bishalgarh">Bishalgarh</option>
-          <option value="Melaghar">Melaghar</option>
-          <option value="Matabari">Matabari</option>
-          <option value="Amarpur">Amarpur</option>
-          <option value="Rajnagar">Rajnagar</option>
-          <option value="Bakafa">Bakafa</option>
-          <option value="Satchand">Satchand</option>
-          <option value="Rupaichari">Rupaichari</option>
-          <option value="Kadamtala">Kadamtala</option>
+          <option value="Jampuijala">Jampuijala</option>
+          <option value="Sonamura">Sonamura</option>
+          <option value="Kumarghat">Kumarghat</option>
+          <option value="Kailashahar">Kailashahar</option>
+          <option value="Dharmanagar">Dharmanagar</option>
           <option value="Kanchanpur">Kanchanpur</option>
           <option value="Panisagar">Panisagar</option>
-          <option value="Salema">Salema</option>
-          <option value="Gandacherra">Gandacherra</option>
-          <option value="Chawmanu">Chawmanu</option>
-          <option value="Sadar">Sadar</option>
+          <option value="Ambassa">Ambassa</option>
+          <option value="Kamalpur">Kamalpur</option>
+          <option value="Longtarai Valley">Longtarai Valley</option>
+          <option value="Gandachera">Gandachera</option>
+
         </select>
       );
     }
@@ -289,27 +298,35 @@ const BloodSeekersPage = () => {
           </div>
         )}
 
-        {activeSection === "banks" && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredBanks.map((bank) => (
-              <div key={bank.id} className="border rounded-lg p-4 shadow-md">
-                <h2 className="font-bold text-lg">{bank.name}</h2>
-                <p>Location: {bank.subdivision}</p>
-                <p>Email: {bank.email}</p>
-                <p>Number: {bank.number}</p>
-                <p>
-                  Available Blood Types: {bank.availableBloodTypes.join(", ")}
-                </p>
-                <Button
-                  className="mt-2"
-                  onClick={() => alert(`Contact ${bank.name}`)}
-                >
-                  Contact
-                </Button>
-              </div>
-            ))}
-          </div>
-        )}
+{activeSection === "banks" && (
+  <div>
+    {filteredBanks.length === 0 ? (
+      <p>No blood banks found matching your criteria.</p>
+    ) : (
+      <table className="table-auto border-collapse border border-gray-300 w-full">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border border-gray-300 px-4 py-2 text-left">Name</th>
+            <th className="border border-gray-300 px-4 py-2 text-left">Location</th>
+            <th className="border border-gray-300 px-4 py-2 text-left">Email</th>
+            <th className="border border-gray-300 px-4 py-2 text-left">Contact</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredBanks.map((bank) => (
+            <tr key={bank.id} className="hover:bg-gray-50">
+              <td className="border border-gray-300 px-4 py-2">{bank.name}</td>
+              <td className="border border-gray-300 px-4 py-2">{bank.district}</td>
+              <td className="border border-gray-300 px-4 py-2">{bank.email}</td>
+              <td className="border border-gray-300 px-4 py-2">{bank.number}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </div>
+)}
+
       </div>
     </div>
   );
