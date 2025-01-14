@@ -47,6 +47,14 @@ const authNavItems: NavItem[] = [
   }
 ];
 
+const bloodBankNavItems: NavItem[] = [
+  {
+    label: "Profile",
+    href: "/profile",
+    icon: <User className="h-4 w-4" />
+  }
+];
+
 interface LayoutProps {
   children: React.ReactNode;
 }
@@ -54,7 +62,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, isBloodBank, logout } = useAuth();
 
   const NavLink: React.FC<{ item: NavItem }> = ({ item }) => {
     const isActive = location.pathname === item.href;
@@ -77,17 +85,27 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const NavItems = () => (
-    <>
-      <nav className="space-y-1">
-        {mainNavItems.map((item) => (
-          <NavLink key={item.href} item={item} />
-        ))}
-      </nav>
+    <nav className="space-y-1">
+      {mainNavItems.map((item) => (
+        <NavLink key={item.href} item={item} />
+      ))}
       <hr className="my-4" />
       <nav className="space-y-1">
         {isAuthenticated ? (
           <>
-            <NavLink item={{ label: "Profile", href: "/profile", icon: <User className="h-4 w-4" /> }} />
+            {isBloodBank ? (
+              // If it's a Blood Bank user, show Profile
+              bloodBankNavItems.map((item) => (
+                <NavLink key={item.href} item={item} />
+              ))
+            ) : (
+              // If it's not a Blood Bank, show donor-related nav items (profile)
+              <NavLink
+                key="/profile"
+                item={{ label: "Profile", href: "/profile", icon: <User className="h-4 w-4" /> }}
+              />
+            )}
+            {/* Render Logout Button only once */}
             <Button
               onClick={() => {
                 logout();
@@ -105,7 +123,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           ))
         )}
       </nav>
-    </>
+    </nav>
   );
 
   return (
@@ -149,4 +167,3 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 };
 
 export default Layout;
-
