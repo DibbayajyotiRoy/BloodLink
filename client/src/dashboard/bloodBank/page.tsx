@@ -81,7 +81,7 @@ const BloodBankDashboard: React.FC = () => {
       <h2 className="text-xl font-semibold mb-2">Update Blood Units</h2>
       <ul className="space-y-2">
         {bloodTypes.map((type) => (
-          <Card key={type} className="flex justify-between items-center p-2 border rounded">
+          <Card key={type} className="flex justify-between items-center p-2 border rounded shadow hover:shadow-lg">
             <div className="flex items-center">
               <Droplet className="h-5 w-5 text-red-600 mr-2" />
               <span>{type}</span>
@@ -96,7 +96,7 @@ const BloodBankDashboard: React.FC = () => {
           </Card>
         ))}
       </ul>
-      <Button onClick={handleSubmitBloodUnits}>Submit Blood Units</Button>
+      <Button className='mt-4 bg-red-600 hover:bg-red-700' onClick={handleSubmitBloodUnits}>Submit Blood Units</Button>
     </div>
   );
 };

@@ -65,28 +65,34 @@ export default function DonorForm() {
       toast.success("Registration successful!");
       setIsSubmitted(true);
 
+      // navigate("/bloodseekers")
+
       // Redirect to home page after 3 seconds
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
+      // setTimeout(() => {
+      //   navigate("/bloodseekers");
+      // }, 3000);
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
     }
   }
 
-  if (isSubmitted) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="bg-white border border-gray-300 rounded-lg shadow-xl p-6 w-full max-w-2xl text-center">
-          <h2 className="text-2xl font-semibold mb-4">
-            Successfully Signed In!
-          </h2>
-          <p>Redirecting to home page in 3 seconds...</p>
-        </div>
-      </div>
-    );
+  if(isSubmitted){
+    navigate("/bloodseekers")
   }
+
+  // if (isSubmitted) {
+  //   return (
+  //     <div className="flex justify-center items-center min-h-screen">
+  //       <div className="bg-white border border-gray-300 rounded-lg shadow-xl p-6 w-full max-w-2xl text-center">
+  //         <h2 className="text-2xl font-semibold mb-4">
+  //           Successfully Signed In!
+  //         </h2>
+  //         <p>Redirecting to home page in 3 seconds...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex justify-center items-center min-h-screen">
