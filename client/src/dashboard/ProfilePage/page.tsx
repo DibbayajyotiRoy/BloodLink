@@ -191,6 +191,7 @@ const ProfilePage: React.FC = () => {
                   <div className="flex items-center space-x-4">
                     <label className="text-lg">Name:</label>
                     <input
+                      title="name"
                       type="text"
                       name="name"
                       value={updatedDonor?.name || ""}
@@ -202,6 +203,7 @@ const ProfilePage: React.FC = () => {
                   <div className="flex items-center space-x-4">
                     <label className="text-lg">Email:</label>
                     <input
+                      title="email"
                       type="email"
                       name="email"
                       value={updatedDonor?.email || ""}
@@ -213,6 +215,7 @@ const ProfilePage: React.FC = () => {
                   <div className="flex items-center space-x-4">
                     <label className="text-lg">Phone Number:</label>
                     <input
+                     title="number"
                       type="text"
                       name="number"
                       value={updatedDonor?.number || ""}
@@ -224,6 +227,7 @@ const ProfilePage: React.FC = () => {
                   <div className="flex items-center space-x-4">
                     <label className="text-lg">Blood Type:</label>
                     <input
+                      title="bloodType"
                       type="text"
                       name="bloodType"
                       value={updatedDonor?.bloodType || ""}
@@ -235,6 +239,7 @@ const ProfilePage: React.FC = () => {
                   <div className="flex items-center space-x-4">
                     <label className="text-lg">Subdivision:</label>
                     <input
+                      title="subdivision"
                       type="text"
                       name="subdivision"
                       value={updatedDonor?.subdivision || ""}
