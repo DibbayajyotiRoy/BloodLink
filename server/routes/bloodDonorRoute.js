@@ -4,7 +4,7 @@ import z from "zod";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 import jwt from 'jsonwebtoken';
-
+import mongoose from "mongoose";
 
 const JWT_SECRET = "BloodLink"
 
@@ -187,6 +187,34 @@ bloodDonorRoute.post("/find-donors", async (req, res) => {
   }
 });
 
+
+bloodDonorRoute.post('/find-donor', async (req, res) => {
+  const { id } = req.body;
+  console.log(id);
+  
+  if (!id) {
+      return res.status(400).json({ error: 'ID is required' });
+  }
+
+  try {
+      // Check if the ID is a valid ObjectId
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+          return res.status(400).json({ error: 'Invalid ID format' });
+      }
+
+      // Fetch donor details (selecting specific fields)
+      const donorDetails = await bloodDonorModel.findById(id);
+      if (!donorDetails) {
+          return res.status(404).json({ error: 'Donor not found' });
+      }
+
+      // Return the donor details
+      return res.status(200).json({ donorDetails });
+  } catch (error) {
+      console.error('Error fetching donor details:', error);
+      return res.status(500).json({ error: 'Server error' });
+  }
+});
 
 bloodDonorRoute.post('/profile', async (req, res) => {
   try {

@@ -17,6 +17,7 @@ const NotFound = React.lazy(() => import('./components/NotFound'));
 const Login = React.lazy(() => import('./login/login'));
 const ProfilePage = React.lazy(() => import('./dashboard/ProfilePage/page'));
 const BankProfile = React.lazy(() => import('./dashboard/ProfilePage/BankProfile'));
+const DonorProfilePage = React.lazy(() => import('./dashboard/ProfilePage/DonorProfile'));
 
 
 // Define route configuration
@@ -30,6 +31,7 @@ const routes = [
   { path: '/login', element: <Login /> },
   { path: '/profile', element: <ProfilePage /> },
   { path: '/profile/:id', element: <BankProfile /> },
+  { path: '/profile/blooddonor/:id', element: <DonorProfilePage /> },
 ];
 
 function App() {
