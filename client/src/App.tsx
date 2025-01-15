@@ -14,7 +14,7 @@ const BloodBankRegister = React.lazy(() => import('./SignUp/BloodBankRegister'))
 const BloodSeekersPage = React.lazy(() => import('./dashboard/BloodSeekers/page'));
 const BloodBankDashboard = React.lazy(() => import('./dashboard/bloodBank/page'));
 const NotFound = React.lazy(() => import('./components/NotFound'));
-const Login = React.lazy(() => import('./login/bloodbanklogin'));
+const Login = React.lazy(() => import('./login/login'));
 const ProfilePage = React.lazy(() => import('./dashboard/ProfilePage/page'));
 
 // Define route configuration

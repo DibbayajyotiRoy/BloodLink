@@ -24,7 +24,7 @@ const formSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-export default function BloodDonorLogin() {
+export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -32,27 +32,49 @@ export default function BloodDonorLogin() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // Send a POST request to the API endpoint
-      const response = await axios.post(
+      // First, try to log in as a blood donor
+      const donorResponse = await axios.post(
         "http://localhost:3000/blooddonor/signin",
         {
           name: values.username,
           password: values.password, // Send username and password
         }
       );
-      console.log(response.data); // Log the response data for debugging
 
-      // Save the token in localStorage or sessionStorage
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("userType", "blooddonor"); // Assuming the user is a blood donor
-      
+      console.log(donorResponse.data); // Log the response data for debugging
 
-      // Redirect to BloodBankDashboard after successful login
-      toast.success("Login successful!");
-      navigate("/"); // Navigates directly to the home
-    } catch (error) {
-      console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
+      // If login is successful, handle as a blood donor
+      localStorage.setItem("token", donorResponse.data.token);
+      localStorage.setItem("userType", "blooddonor");
+
+      toast.success("Blood Donor Login successful!");
+      navigate("/"); // Navigate to home page for blood donor
+
+    } catch (donorError) {
+      // If blood donor login fails, try to log in as a blood bank
+      try {
+        const bankResponse = await axios.post(
+          "http://localhost:3000/bloodbank/signin",
+          {
+            name: values.username,
+            password: values.password, // Send username and password
+          }
+        );
+
+        console.log(bankResponse.data); // Log the response data for debugging
+
+        // If login is successful, handle as a blood bank
+        localStorage.setItem("token", bankResponse.data.token);
+        localStorage.setItem("userType", "bloodbank");
+
+        toast.success("Blood Bank Login successful!");
+        navigate("/dashboard"); // Navigate to blood bank dashboard
+
+      } catch (bankError) {
+        // If neither login is successful, show an error message
+        console.error("Form submission error", bankError);
+        toast.error("Invalid username or password. Please try again.");
+      }
     }
   }
 
