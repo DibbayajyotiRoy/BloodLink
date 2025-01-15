@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import z from 'zod'
 import jwt from 'jsonwebtoken'
 const JWT_SECRET = 'BloodLink'
+import mongoose from 'mongoose'
 
 import { bloodBankModel } from '../database/Schema/bloodBank.js'
 import { bloodQuantityModel } from '../database/Schema/bloodQuantity.js'
@@ -148,6 +149,55 @@ bloodBankRoute.post('/find-banks', async (req,res)=>{
       // Respond with the banks' data
       res.status(200).json({ banks });
 })
+
+bloodBankRoute.post('/find-bank', async (req, res) => {
+    const { id } = req.body;
+    console.log(id);
+    
+    if (!id) {
+        return res.status(400).json({ error: 'ID is required' });
+    }
+  
+    try {
+        // Check if the ID is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid ID format' });
+        }
+  
+        // Fetch blood bank details
+        const bloodBankDetails = await bloodBankModel.findById(id);
+        if (!bloodBankDetails) {
+            return res.status(404).json({ error: 'Blood bank not found' });
+        }
+  
+        // Fetch blood quantities for this blood bank
+        let bloodQuantities = await bloodQuantityModel.findOne({ bloodBank: id });
+        if (!bloodQuantities) {
+            // If no blood quantities are found, send default values (all quantities as 0)
+            bloodQuantities = {
+                quantities: {
+                    A_positive: 0,
+                    A_negative: 0,
+                    B_positive: 0,
+                    B_negative: 0,
+                    O_positive: 0,
+                    O_negative: 0,
+                    AB_positive: 0,
+                    AB_negative: 0
+                },
+                lastUpdated: new Date(),
+            };
+        }
+  
+        // Return both the blood bank details and the blood quantities
+        return res.status(200).json({ bloodBankDetails, bloodQuantities });
+    } catch (error) {
+        console.error('Error fetching blood bank details:', error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+});
+
+  
 
 
 // Route to add or update blood quantities

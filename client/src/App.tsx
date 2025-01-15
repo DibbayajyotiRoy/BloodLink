@@ -16,6 +16,8 @@ const BloodBankDashboard = React.lazy(() => import('./dashboard/bloodBank/page')
 const NotFound = React.lazy(() => import('./components/NotFound'));
 const Login = React.lazy(() => import('./login/login'));
 const ProfilePage = React.lazy(() => import('./dashboard/ProfilePage/page'));
+const BankProfile = React.lazy(() => import('./dashboard/ProfilePage/BankProfile'));
+
 
 // Define route configuration
 const routes = [
@@ -27,6 +29,7 @@ const routes = [
   { path: '/404', element: <NotFound /> },
   { path: '/login', element: <Login /> },
   { path: '/profile', element: <ProfilePage /> },
+  { path: '/profile/:id', element: <BankProfile /> },
 ];
 
 function App() {

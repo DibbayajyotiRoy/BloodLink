@@ -308,19 +308,20 @@ const BloodSeekersPage = () => {
       //   </tbody>
       // </table>
       filteredBanks.map((bank) => (
-        <div key={bank.id} className="mb-5 border-2 border-gray-200 rounded-lg p-4 shadow-md bg-white hover:shadow-xl  transition duration-300 ease-in-out">
+        <div key={bank._id} className="mb-5 border-2 border-gray-200 rounded-lg p-4 shadow-md bg-white hover:shadow-xl transition duration-300 ease-in-out">
           <h2 className="font-bold text-lg">{bank.name}</h2>
           <p>Location: {bank.district}</p>
           <p>Email: {bank.email}</p>
           <p>Contact: {bank.number}</p>
           <Button
             className="mt-2"
-            onClick={() => navigate(`/profile/${bank.id}`)}
+            onClick={() => navigate(`/profile/${bank._id}`)}
           >
             View Profile
           </Button>
         </div>
       ))
+      
     )}
   </div>
 )}
