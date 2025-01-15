@@ -3,8 +3,14 @@ import { bloodDonorModel } from "../database/Schema/bloodDonor.js";
 import z from "zod";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
+import jwt from 'jsonwebtoken';
+
+
+const JWT_SECRET = "BloodLink"
 
 const bloodDonorRoute = express.Router();
+
+import { bloodBankModel } from "../database/Schema/bloodBank.js";
 
 // Geocode location function
 const geocodeLocation = async (subdivision, state) => {
@@ -82,6 +88,66 @@ bloodDonorRoute.post("/signup", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+// Route to sign in donors
+bloodDonorRoute.post('/signin', async (req,res)=>{
+  try {
+      const {name , password} = req.body
+      console.log(name,password)
+      const requiredBody = z.object({   
+          name:z.string().min(3).max(100),   
+          password:z.string().min(3).max(100),              
+      })
+
+      const {success} = requiredBody.safeParse(req.body)
+      if(!success){
+          console.log("Invalid Input")
+          res.status(404).json({
+              message:"Invalid input"
+          })
+          return
+      }
+
+      try {
+          const user = await bloodDonorModel.findOne({
+              name
+          })
+          const response = await bcrypt.compare(password , user.password)
+
+          if(!response){
+              console.log(response)
+              res.status(404).json({
+                  message:"Invalid name or password"
+              })
+              return
+          }
+
+          const token = jwt.sign(
+              { id: user._id, name: user.name },
+              JWT_SECRET 
+          );
+
+          return res.status(200).json({
+              message: "Signin successful",
+              token
+          });
+
+      } catch (error) {
+          console.log(error)
+          res.status(400).json({
+              message:"Database server failed"
+          })
+      }
+
+  } catch (error) {
+      console.log(error)
+      res.status(400).json({
+          response:error
+      })
+      return
+  }
+})
+
 
 // Route to find donors
 

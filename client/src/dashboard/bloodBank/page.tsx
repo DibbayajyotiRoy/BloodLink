@@ -24,12 +24,14 @@ const BloodBankDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false); // Track loading status
   const navigate = useNavigate(); // For navigation
 
-  // Verify token and fetch blood bank name on component mount
+  // Verify token and user type on component mount
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("Access denied. Please log in.");
-      navigate("/login"); // Redirect to login page if token is missing
+    const userType = localStorage.getItem("userType");
+
+    if (!token || userType !== "bloodbank") {
+      toast.error("Access denied. Only blood banks are allowed to access this page.");
+      navigate("/login"); // Redirect to login page if userType is not "bloodbank"
       return;
     }
 
@@ -51,12 +53,12 @@ const BloodBankDashboard: React.FC = () => {
   // Handle blood units submission
   const handleSubmitBloodUnits = async () => {
     const token = localStorage.getItem("token");
-  
+
     if (!token) {
       toast.error("No token found. Please log in.");
       return;
     }
-  
+
     const data = {
       token,
       A_positive: bloodQuantities["A+"] || 0,
@@ -68,27 +70,25 @@ const BloodBankDashboard: React.FC = () => {
       AB_positive: bloodQuantities["AB+"] || 0,
       AB_negative: bloodQuantities["AB-"] || 0,
     };
-  
+
     setIsLoading(true); // Show loading spinner
-  
+
     try {
       const response = await axios.post("http://localhost:3000/bloodbank/add-bloods", data, {
         headers: {
           token,
         },
       });
-  
+
       console.log("Server Response:", response.data);
       toast.success("Blood quantities updated successfully!");
-  
+
       // Set hasSubmitted to true to indicate that the submission is complete
       setHasSubmitted(true);
-  
-      // Wait for 3 seconds before refreshing the page and navigating
-      // setTimeout(() => {
-        navigate("/"); // Navigate to the home page immediately
-        window.location.reload(); // Then refresh the page
-      // }, 3000);
+
+      // Navigate to the home page immediately and refresh
+      navigate("/");
+      window.location.reload();
     } catch (error) {
       console.error("Error submitting blood units:", error);
       toast.error("Failed to update blood units. Please try again later.");
@@ -96,7 +96,6 @@ const BloodBankDashboard: React.FC = () => {
       setIsLoading(false); // Hide loading spinner once the process is done
     }
   };
-  
 
   return (
     <div className="container mx-auto p-4">

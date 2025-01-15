@@ -63,19 +63,15 @@ export default function DonorForm() {
       );
       console.log(response.data);
       toast.success("Registration successful!");
-      setIsSubmitted(true);
-
-      // navigate("/bloodseekers")
-
-      // Redirect to home page after 3 seconds
-      // setTimeout(() => {
-      //   navigate("/bloodseekers");
-      // }, 3000);
+  
+      // Redirect to login page after successful signup
+      navigate("/login");
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
     }
   }
+  
 
   if(isSubmitted){
     navigate("/bloodseekers")
