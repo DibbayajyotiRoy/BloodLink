@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom"; // Use useNavigate for redirection
-import { useState } from "react";
 
 // Define the form schema using Zod
 const formSchema = z.object({
@@ -31,43 +30,31 @@ export default function BloodDonorLogin() {
   });
   const navigate = useNavigate(); // Hook to navigate to another page
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true); // Set submitting state to true
-  
     try {
-      const response = await axios.post("http://localhost:3000/blooddonor/signin", {
-        name: values.username,
-        password: values.password,
-      });
-  
-      console.log(response.data);
-  
-      // Save the token
+      // Send a POST request to the API endpoint
+      const response = await axios.post(
+        "http://localhost:3000/blooddonor/signin",
+        {
+          name: values.username,
+          password: values.password, // Send username and password
+        }
+      );
+      console.log(response.data); // Log the response data for debugging
+
+      // Save the token in localStorage or sessionStorage
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("userType", "blooddonor");
-  
+      localStorage.setItem("userType", "blooddonor"); // Assuming the user is a blood donor
+      
+
+      // Redirect to BloodBankDashboard after successful login
       toast.success("Login successful!");
-      navigate("/"); // Redirect after success
+      navigate("/"); // Navigates directly to the home
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
-    } finally {
-      setIsSubmitting(false); // Reset submitting state after the request completes
     }
   }
-  
-  return (
-    <Button
-      className="min-w-40 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg"
-      type="submit"
-      disabled={isSubmitting} // Disable the button while submitting
-    >
-      {isSubmitting ? "Logging in..." : "Login"} // Change button text when submitting
-    </Button>
-  );
-  
 
   return (
     <div className="flex justify-center items-center min-h-screen">
