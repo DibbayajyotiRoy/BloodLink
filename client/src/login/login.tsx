@@ -45,10 +45,11 @@ export default function Login() {
       // Save the token in localStorage or sessionStorage
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userType", "bloodBank"); // Assuming the user is a blood bank
+      
 
       // Redirect to BloodBankDashboard after successful login
-      navigate("/dashboard"); // Navigates directly to the dashboard
       toast.success("Login successful!");
+      navigate("/dashboard"); // Navigates directly to the dashboard
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");

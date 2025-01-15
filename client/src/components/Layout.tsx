@@ -62,7 +62,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const { isAuthenticated, isBloodBank, logout } = useAuth();
+
 
   const NavLink: React.FC<{ item: NavItem }> = ({ item }) => {
     const isActive = location.pathname === item.href;
@@ -84,47 +84,45 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     );
   };
 
-  const NavItems = () => (
-    <nav className="space-y-1">
-      {mainNavItems.map((item) => (
-        <NavLink key={item.href} item={item} />
-      ))}
-      <hr className="my-4" />
+  const NavItems = () => {
+    const {logout, isAuthenticated, isBloodBank } = useAuth();
+  
+    return (
       <nav className="space-y-1">
-        {isAuthenticated ? (
-          <>
-            {isBloodBank ? (
-              // If it's a Blood Bank user, show Profile
-              bloodBankNavItems.map((item) => (
-                <NavLink key={item.href} item={item} />
-              ))
-            ) : (
-              // If it's not a Blood Bank, show donor-related nav items (profile)
-              <NavLink
-                key="/profile"
-                item={{ label: "Profile", href: "/profile", icon: <User className="h-4 w-4" /> }}
-              />
-            )}
-            {/* Render Logout Button only once */}
-            <Button
-              onClick={() => {
-                logout();
-                setIsOpen(false);
-              }}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md w-full justify-start"
-            >
-              <LogIn className="h-4 w-4" />
-              Logout
-            </Button>
-          </>
-        ) : (
-          authNavItems.map((item) => (
-            <NavLink key={item.href} item={item} />
-          ))
-        )}
+        {mainNavItems.map((item) => (
+          <NavLink key={item.href} item={item} />
+        ))}
+        <hr className="my-4" />
+        <nav className="space-y-1">
+          {isAuthenticated ? (
+            <>
+              {isBloodBank ? (
+                bloodBankNavItems.map((item) => <NavLink key={item.href} item={item} />)
+              ) : (
+                <NavLink
+                  key="/profile"
+                  item={{ label: "Profile", href: "/profile", icon: <User className="h-4 w-4" /> }}
+                />
+              )}
+              <Button
+                onClick={() => {
+                  logout();
+                  setIsOpen(false);
+                }}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md w-full justify-start"
+              >
+                <LogIn className="h-4 w-4" />
+                Logout
+              </Button>
+            </>
+          ) : (
+            authNavItems.map((item) => <NavLink key={item.href} item={item} />)
+          )}
+        </nav>
       </nav>
-    </nav>
-  );
+    );
+  };
+  
 
   return (
     <div className="min-h-screen bg-background">

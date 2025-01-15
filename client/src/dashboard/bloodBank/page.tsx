@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Droplet } from "lucide-react";
 import { toast } from "react-toastify";
+import { Spinner } from "@/components/ui/spinner"; // Assuming you have a Spinner component
 
 // Helper function to decode JWT token
 function decodeToken(token: string) {
@@ -19,6 +20,8 @@ const BloodBankDashboard: React.FC = () => {
   const [bloodQuantities, setBloodQuantities] = useState<{ [key: string]: number }>({});
   const [error, setError] = useState<string | null>(null);
   const [bloodBankName, setBloodBankName] = useState<string>("");
+  const [hasSubmitted, setHasSubmitted] = useState<boolean>(false); // Track submission status
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Track loading status
   const navigate = useNavigate(); // For navigation
 
   // Verify token and fetch blood bank name on component mount
@@ -48,12 +51,12 @@ const BloodBankDashboard: React.FC = () => {
   // Handle blood units submission
   const handleSubmitBloodUnits = async () => {
     const token = localStorage.getItem("token");
-
+  
     if (!token) {
       toast.error("No token found. Please log in.");
       return;
     }
-
+  
     const data = {
       token,
       A_positive: bloodQuantities["A+"] || 0,
@@ -65,26 +68,35 @@ const BloodBankDashboard: React.FC = () => {
       AB_positive: bloodQuantities["AB+"] || 0,
       AB_negative: bloodQuantities["AB-"] || 0,
     };
-
+  
+    setIsLoading(true); // Show loading spinner
+  
     try {
       const response = await axios.post("http://localhost:3000/bloodbank/add-bloods", data, {
         headers: {
           token,
         },
       });
-
+  
       console.log("Server Response:", response.data);
       toast.success("Blood quantities updated successfully!");
-
-      // Navigate to the home page after 3 seconds
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
+  
+      // Set hasSubmitted to true to indicate that the submission is complete
+      setHasSubmitted(true);
+  
+      // Wait for 3 seconds before refreshing the page and navigating
+      // setTimeout(() => {
+        navigate("/"); // Navigate to the home page immediately
+        window.location.reload(); // Then refresh the page
+      // }, 3000);
     } catch (error) {
       console.error("Error submitting blood units:", error);
       toast.error("Failed to update blood units. Please try again later.");
+    } finally {
+      setIsLoading(false); // Hide loading spinner once the process is done
     }
   };
+  
 
   return (
     <div className="container mx-auto p-4">
@@ -113,8 +125,17 @@ const BloodBankDashboard: React.FC = () => {
           </li>
         ))}
       </ul>
-      <Button className="mt-4 bg-red-600 hover:bg-red-700" onClick={handleSubmitBloodUnits}>
-        Submit Blood Units
+
+      <Button
+        className="mt-4 bg-red-600 hover:bg-red-700"
+        onClick={handleSubmitBloodUnits}
+        disabled={hasSubmitted || isLoading} // Disable button if already submitted or in loading state
+      >
+        {isLoading ? (
+          <Spinner size="sm" /> // Show a spinner when loading
+        ) : (
+          "Submit Blood Units"
+        )}
       </Button>
     </div>
   );

@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   isBloodBank: boolean;
-  login: (userType: 'donor' | 'bloodBank') => void;
+  login: (userType: "donor" | "bloodBank") => void;
   logout: () => void;
 }
 
@@ -18,32 +18,35 @@ export const useAuth = (): AuthContextType => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isBloodBank, setIsBloodBank] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isBloodBank, setIsBloodBank] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    // Initialize authentication state on load
+    const token = localStorage.getItem("token");
+    const userType = localStorage.getItem("userType");
+
     if (token) {
       setIsAuthenticated(true);
-      const userType = localStorage.getItem('userType');
-      if (userType === 'bloodBank') {
-        setIsBloodBank(true);
-      }
+      setIsBloodBank(userType === "bloodBank");
     }
-  }, []);
+  }, []); // Runs only on mount
 
-  const login = (userType: 'donor' | 'bloodBank') => {
+  const login = (userType: "donor" | "bloodBank") => {
     setIsAuthenticated(true);
-    setIsBloodBank(userType === 'bloodBank');
-    localStorage.setItem('token', 'some-token');
-    localStorage.setItem('userType', userType);
+    setIsBloodBank(userType === "bloodBank");
+    localStorage.setItem("token", "some-token");
+    localStorage.setItem("userType", userType);
+    console.log("working")
+    window.location.reload(); 
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     setIsBloodBank(false);
-    localStorage.removeItem('token');
-    localStorage.removeItem('userType');
+    localStorage.removeItem("token");
+    localStorage.removeItem("userType");
+    window.location.reload(); 
   };
 
   return (
