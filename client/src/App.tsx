@@ -26,7 +26,7 @@ const routes = [
   { path: '/dashboard', element: <BloodBankDashboard /> },
   { path: '/404', element: <NotFound /> },
   { path: '/login', element: <Login /> },
-  { path: '/profile/:id', element: <ProfilePage /> },
+  { path: '/profile', element: <ProfilePage /> },
 ];
 
 function App() {

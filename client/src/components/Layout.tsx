@@ -50,6 +50,14 @@ const authNavItems: NavItem[] = [
 const bloodBankNavItems: NavItem[] = [
   {
     label: "Profile",
+    href: "/bloodbank/profile",
+    icon: <User className="h-4 w-4" />
+  }
+];
+
+const donorNavItems: NavItem[] = [
+  {
+    label: "Profile",
     href: "/profile",
     icon: <User className="h-4 w-4" />
   }
@@ -62,7 +70,6 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-
 
   const NavLink: React.FC<{ item: NavItem }> = ({ item }) => {
     const isActive = location.pathname === item.href;
@@ -85,7 +92,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const NavItems = () => {
-    const {logout, isAuthenticated, isBloodBank } = useAuth();
+    const { logout, isAuthenticated, isBloodBank } = useAuth();
   
     return (
       <nav className="space-y-1">
@@ -97,12 +104,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           {isAuthenticated ? (
             <>
               {isBloodBank ? (
+                // Blood bank profile navigation
                 bloodBankNavItems.map((item) => <NavLink key={item.href} item={item} />)
               ) : (
-                <NavLink
-                  key="/profile"
-                  item={{ label: "Profile", href: "/profile", icon: <User className="h-4 w-4" /> }}
-                />
+                // Blood donor profile navigation
+                donorNavItems.map((item) => <NavLink key={item.href} item={item} />)
               )}
               <Button
                 onClick={() => {
@@ -122,7 +128,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </nav>
     );
   };
-  
 
   return (
     <div className="min-h-screen bg-background">

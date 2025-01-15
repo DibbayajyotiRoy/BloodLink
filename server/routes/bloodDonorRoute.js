@@ -188,5 +188,79 @@ bloodDonorRoute.post("/find-donors", async (req, res) => {
 });
 
 
+bloodDonorRoute.post('/profile', async (req, res) => {
+  try {
+    // Extract the token from headers
+    const token = req.headers.token;
+
+    if (!token) {
+      return res.status(401).json({ error: 'Authorization token is required' });
+    }
+
+    // Verify the token
+    const decoded = jwt.verify(token, JWT_SECRET); // Replace 'your_secret_key' with your JWT secret
+
+    // Extract the donor ID from the decoded token
+    const donorId = decoded.id;
+
+    if (!donorId) {
+      return res.status(400).json({ error: 'Invalid token' });
+    }
+
+    // Find the donor by ID
+    const donor = await bloodDonorModel.findById(donorId);
+
+    if (!donor) {
+      return res.status(404).json({ error: 'Donor not found' });
+    }
+
+    // Send the response with donor details
+    return res.status(200).json({
+      name: donor.name,
+      email: donor.email,
+      bloodType: donor.bloodType,
+      subdivision: donor.subdivision,
+      number: donor.number,
+      eligibility: donor.eligibility,
+    });
+  } catch (error) {
+    console.error('Error fetching donor profile:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+bloodDonorRoute.put("/update", async (req, res) => {
+  console.log(req.body)
+  const {id,  name, email, number, bloodType, subdivision } = req.body; // Get data from the request body
+
+  try {
+    // Validate input data (optional, but recommended)
+    if ( !name || !email || !number || !bloodType || !subdivision) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Find the donor by ID
+    const donor = await bloodDonorModel.findById(id);
+
+    if (!donor) {
+      return res.status(404).json({ message: "Donor not found" });
+    }
+
+    // Update donor's profile information
+    donor.name = name;
+    donor.email = email;
+    donor.number = number;
+    donor.bloodType = bloodType;
+    donor.subdivision = subdivision;
+
+    // Save the updated donor data
+    await donor.save();
+
+    res.status(200).json({ message: "Profile updated successfully", donor });
+  } catch (err) {
+    console.error("Error updating donor profile:", err);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+});
 
 export { bloodDonorRoute };
