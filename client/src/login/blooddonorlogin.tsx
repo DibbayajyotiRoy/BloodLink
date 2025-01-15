@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom"; // Use useNavigate for redirection
+import { useState } from "react";
 
 // Define the form schema using Zod
 const formSchema = z.object({
@@ -24,37 +25,49 @@ const formSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-export default function Login() {
+export default function BloodDonorLogin() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
   const navigate = useNavigate(); // Hook to navigate to another page
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true); // Set submitting state to true
+  
     try {
-      // Send a POST request to the API endpoint
-      const response = await axios.post(
-        "http://localhost:3000/bloodbank/signin",
-        {
-          name: values.username,
-          password: values.password, // Send username and password
-        }
-      );
-      console.log(response.data); // Log the response data for debugging
-
-      // Save the token in localStorage or sessionStorage
+      const response = await axios.post("http://localhost:3000/blooddonor/signin", {
+        name: values.username,
+        password: values.password,
+      });
+  
+      console.log(response.data);
+  
+      // Save the token
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("userType", "bloodBank"); // Assuming the user is a blood bank
-      
-
-      // Redirect to BloodBankDashboard after successful login
+      localStorage.setItem("userType", "blooddonor");
+  
       toast.success("Login successful!");
-      navigate("/dashboard"); // Navigates directly to the dashboard
+      navigate("/"); // Redirect after success
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
+    } finally {
+      setIsSubmitting(false); // Reset submitting state after the request completes
     }
   }
+  
+  return (
+    <Button
+      className="min-w-40 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg"
+      type="submit"
+      disabled={isSubmitting} // Disable the button while submitting
+    >
+      {isSubmitting ? "Logging in..." : "Login"} // Change button text when submitting
+    </Button>
+  );
+  
 
   return (
     <div className="flex justify-center items-center min-h-screen">
