@@ -32,8 +32,8 @@ const bloodDonorSchema = new mongoose.Schema({
         default:false
     },
     lastDonated:{
-        type: String,
-        default:null
+        type: Date,
+        default:Date.now
     },
     state:{
         type:String,
