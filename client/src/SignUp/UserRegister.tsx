@@ -132,12 +132,12 @@ export default function DonorForm() {
                       {...field}
                     >
                       <option value="">Select your Sub-Division</option>
-                      <option value="Kamalpur">Kamalpur</option>
-                      <option value="Ambassa">Ambassa</option>
-                      <option value="Longtharai_Valley">
-                        Longtharai Valley
-                      </option>
-                      <option value="Gandachera">Gandachera</option>
+                      <option value="Sadar">Sadar</option>
+                      <option value="Mohanpur">Mohanpur</option>
+                      <option value="Jirania">Jirania</option>
+                      <option value="Belonia">Belonia</option>
+                      <option value="Santirbazar">Santirbazar</option>
+                      <option value="Sabroom">Sabroom</option>
                       <option value="Udaipur">Udaipur</option>
                       <option value="Amarpur">Amarpur</option>
                       <option value="Karbook">Karbook</option>
@@ -151,12 +151,10 @@ export default function DonorForm() {
                       <option value="Dharmanagar">Dharmanagar</option>
                       <option value="Kanchanpur">Kanchanpur</option>
                       <option value="Panisagar">Panisagar</option>
-                      <option value="Santirbazar">Santirbazar</option>
-                      <option value="Belonia">Belonia</option>
-                      <option value="Sabroom">Sabroom</option>
-                      <option value="Sadar">Sadar</option>
-                      <option value="Mohanpur">Mohanpur</option>
-                      <option value="Jirania">Jirania</option>
+                      <option value="Ambassa">Ambassa</option>
+                      <option value="Kamalpur">Kamalpur</option>
+                      <option value="Longtarai Valley">Longtarai Valley</option>
+                      <option value="Gandachera">Gandachera</option>
                     </select>
                   </FormControl>
                   <FormDescription>
