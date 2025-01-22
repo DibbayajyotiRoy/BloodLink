@@ -1,9 +1,11 @@
-import { Link } from 'react-router-dom';
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle, XCircle } from "lucide-react"
+import { Link, useNavigate } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle, XCircle } from "lucide-react";
 
 export default function EligibilityResult({ isEligible }: { isEligible: boolean }) {
+  const navigate = useNavigate(); 
+
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
@@ -27,15 +29,14 @@ export default function EligibilityResult({ isEligible }: { isEligible: boolean 
       <CardFooter className="flex justify-center">
         {isEligible ? (
           <Button asChild>
-            <Link href="/register/donor">Proceed to Registration</Link>
+            <Link to="/register/donor">Proceed to Registration</Link>
           </Button>
         ) : (
-          <Button asChild variant="outline">
-            <Link href="/">Return to Home</Link>
-          </Button>
+          <p >
+            Return to Home
+          </p>
         )}
       </CardFooter>
     </Card>
-  )
+  );
 }
-

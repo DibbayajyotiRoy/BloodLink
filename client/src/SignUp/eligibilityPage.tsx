@@ -1,5 +1,4 @@
 import EligibilityForm from "@/components/EligibilityForm"
-import NotEligiblePage from "@/components/NotEligiblePage"
 
 export default function EligibilityPage() {
   return (

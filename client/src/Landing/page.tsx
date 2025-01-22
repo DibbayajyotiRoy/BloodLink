@@ -35,7 +35,7 @@ const LandingPage = () => {
       {/* Top Navigation */}
       <header className="sticky top-0 z-10 bg-white shadow-lg">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <Droplet className="h-8 w-8 text-red-600" />
             <span className="text-2xl font-bold text-gray-800">BloodLink</span>
           </Link>
@@ -47,12 +47,12 @@ const LandingPage = () => {
               </div>
             ) : (
               <>
-                <Link href="/register/blood-bank">
+                <Link to="/register/blood-bank">
                   <Button variant="outline" className="hidden md:inline-flex">
                     Register as Blood Bank
                   </Button>
                 </Link>
-                <Link href="/eligibility">
+                <Link to="/eligibility">
                   <Button className="bg-red-600 hover:bg-red-700 text-white">Become a Donor</Button>
                 </Link>
               </>
@@ -73,12 +73,12 @@ const LandingPage = () => {
               life-saving blood.
             </p>
             <div className="flex space-x-4">
-              <Link href="/bloodseekers">
+              <Link to="/bloodseekers">
                 <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white">
                   Get Started
                 </Button>
               </Link>
-              <Link href="/learn-more">
+              <Link to="/learn-more">
                 <Button size="lg" variant="outline">
                   Learn More
                 </Button>
@@ -123,7 +123,7 @@ const LandingPage = () => {
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Make a Difference?</h2>
             <p className="text-xl mb-8">Join our community of donors and start saving lives today.</p>
-            <Link href="/eligibility">
+            <Link to="/eligibility">
               <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100">
                 Register as a Donor <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
