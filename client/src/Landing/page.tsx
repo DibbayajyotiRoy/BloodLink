@@ -52,7 +52,7 @@ const LandingPage = () => {
                     Register as Blood Bank
                   </Button>
                 </Link>
-                <Link to="/eligibility">
+                <Link to="/register/donor">
                   <Button className="bg-red-600 hover:bg-red-700 text-white">Become a Donor</Button>
                 </Link>
               </>
@@ -123,7 +123,7 @@ const LandingPage = () => {
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Make a Difference?</h2>
             <p className="text-xl mb-8">Join our community of donors and start saving lives today.</p>
-            <Link to="/eligibility">
+            <Link to="/register/donor">
               <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100">
                 Register as a Donor <ArrowRight className="ml-2 h-5 w-5" />
               </Button>

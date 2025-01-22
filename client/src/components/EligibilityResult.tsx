@@ -16,7 +16,7 @@ export default function EligibilityResult({ isEligible }: { isEligible: boolean 
           <div className="space-y-4">
             <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
             <p className="text-xl font-semibold">You are eligible to donate blood!</p>
-            <p>Please proceed to the registration form to schedule your donation.</p>
+            <p>And your registration is completely successfull</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -29,7 +29,7 @@ export default function EligibilityResult({ isEligible }: { isEligible: boolean 
       <CardFooter className="flex justify-center">
         {isEligible ? (
           <Button asChild>
-            <Link to="/register/donor">Proceed to Registration</Link>
+            <Link to="/">Return to homepage</Link>
           </Button>
         ) : (
           <p >
