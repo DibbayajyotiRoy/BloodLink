@@ -12,12 +12,14 @@ import cookieParser from "cookie-parser";
 import winston from 'winston';
 import { bloodBankRoute } from "./routes/bloodBankRoute.js";
 import { bloodDonorRoute } from "./routes/bloodDonorRoute.js";
+
 // just a random comment
 const app = express();
 app.use(cors())
 app.use(express.json());
 app.use("/bloodbank", bloodBankRoute);
 app.use("/blooddonor", bloodDonorRoute);
+app.use("/donor-counts", bloodDonorRoute)
 
 const PORT = process.env.PORT || 3000;
 

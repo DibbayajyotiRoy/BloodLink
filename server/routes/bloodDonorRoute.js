@@ -291,4 +291,39 @@ bloodDonorRoute.put("/update", async (req, res) => {
   }
 });
 
+// Add this new route to your existing bloodDonorRoute file
+
+bloodDonorRoute.get("/donor-counts", async (req, res) => {
+  try {
+    const donorCounts = await bloodDonorModel.aggregate([
+      {
+        $group: {
+          _id: "$subdivision",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          subdivision: "$_id",
+          count: 1,
+          _id: 0,
+        },
+      },
+      {
+        $sort: { count: -1 },
+      },
+      {
+        $limit: 10, // Limit to top 10 subdivisions
+      },
+    ])
+
+    res.status(200).json(donorCounts)
+  } catch (error) {
+    console.error("Error fetching donor counts:", error)
+    res.status(500).json({ error: "Internal server error" })
+  }
+})
+
+
+
 export { bloodDonorRoute };

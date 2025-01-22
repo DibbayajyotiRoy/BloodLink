@@ -14,8 +14,8 @@ const Footer: React.FC = () => {
             <ul className="flex flex-wrap justify-center md:justify-end space-x-4">
               <li><Link to="/about" className="hover:text-red-400 transition">About</Link></li>
               <li><Link to="/contact" className="hover:text-red-400 transition">Contact</Link></li>
-              <li><Link to="/privacy" className="hover:text-red-400 transition">Privacy Policy</Link></li>
-              <li><Link to="/terms" className="hover:text-red-400 transition">Terms of Service</Link></li>
+              {/* <li><Link to="/privacy" className="hover:text-red-400 transition">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="hover:text-red-400 transition">Terms of Service</Link></li> */}
             </ul>
           </nav>
         </div>

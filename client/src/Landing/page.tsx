@@ -1,11 +1,11 @@
 "use client"
 
-import type React from "react"
 import { useEffect, useState } from "react"
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import { Droplet, Heart, Users, ArrowRight } from "lucide-react"
+import { Droplet, ArrowRight } from "lucide-react"
 import Footer from "@/components/Footer"
+import { DonorChart } from "@/components/DonorChart"
 
 // Helper function to decode JWT token
 function decodeToken(token: string) {
@@ -31,7 +31,7 @@ const LandingPage = () => {
   }, [])
 
   return (
-    <div className="flex flex-col h-screen min-h-screen bg-gradient-to-b from-red-50 to-white">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-red-50 to-white">
       {/* Top Navigation */}
       <header className="sticky top-0 z-10 bg-white shadow-lg">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -94,27 +94,10 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Donor Chart Section */}
         <section className="bg-white py-12 md:py-24">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">Why Donate Blood?</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <FeatureCard
-                icon={<Heart className="h-12 w-12 text-red-600" />}
-                title="Save Lives"
-                description="Your donation can save up to 3 lives with a single pint of blood."
-              />
-              <FeatureCard
-                icon={<Droplet className="h-12 w-12 text-red-600" />}
-                title="Always Needed"
-                description="Every 2 seconds, someone in the world needs blood."
-              />
-              <FeatureCard
-                icon={<Users className="h-12 w-12 text-red-600" />}
-                title="Community Impact"
-                description="Strengthen your community by helping those in urgent need."
-              />
-            </div>
+            <DonorChart />
           </div>
         </section>
 
@@ -137,18 +120,5 @@ const LandingPage = () => {
   )
 }
 
-interface FeatureCardProps {
-  icon: React.ReactNode
-  title: string
-  description: string
-}
-
-const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) => (
-  <div className="flex flex-col items-center text-center p-6 bg-gray-50 rounded-lg shadow-md transition duration-300 ease-in-out hover:shadow-lg hover:bg-gray-100">
-    {icon}
-    <h3 className="text-xl font-semibold mt-4 mb-2 text-gray-800">{title}</h3>
-    <p className="text-gray-600">{description}</p>
-  </div>
-)
-
 export default LandingPage
+

@@ -223,7 +223,7 @@ const BloodSeekersPage = () => {
               Find Blood
             </Link> */}
           </nav>
-          <div className="flex space-x-2">
+          {/* <div className="flex space-x-2">
             <Link to="/register/blood-bank">
               <Button variant="outline" className="hidden md:inline-flex">
                 Register as Blood Bank
@@ -234,7 +234,7 @@ const BloodSeekersPage = () => {
                 Become a Donor
               </Button>
             </Link>
-          </div>
+  </div> */}
         </div>
       </header>
 
@@ -292,19 +292,19 @@ const BloodSeekersPage = () => {
       //     <tr className="bg-gray-100">
       //       <th className="border border-gray-300 px-4 py-2 text-center">Name</th>
       //       <th className="border border-gray-300 px-4 py-2 text-center">District</th>
-      //       <th className="border border-gray-300 px-4 py-2 text-center">Email</th>
-      //       <th className="border border-gray-300 px-4 py-2 text-center">Contact</th>
-      //     </tr>
-      //   </thead>
-      //   <tbody>
-      //     {filteredBanks.map((bank) => (
-      //       <tr key={bank.id} className="odd:bg-white even:bg-slate-50">
-      //         <td className=" border border-gray-300 px-4 py-2">{bank.name}</td>
-      //         <td className=" border border-gray-300 px-4 py-2">{bank.district}</td>
-      //         <td className=" border border-gray-300 px-4 py-2">{bank.email}</td>
-      //         <td className=" border border-gray-300 px-4 py-2">{bank.number}</td>
-      //       </tr>
-      //     ))}
+        //     <th className="border border-gray-300 px-4 py-2 text-center">Email</th>
+        //     <th className="border border-gray-300 px-4 py-2 text-center">Contact</th>
+        //   </tr>
+        // </thead>
+        // <tbody>
+        //   {filteredBanks.map((bank) => (
+        //     <tr key={bank.id} className="odd:bg-white even:bg-slate-50">
+        //       <td className=" border border-gray-300 px-4 py-2">{bank.name}</td>
+        //       <td className=" border border-gray-300 px-4 py-2">{bank.district}</td>
+        //       <td className=" border border-gray-300 px-4 py-2">{bank.email}</td>
+        //       <td className=" border border-gray-300 px-4 py-2">{bank.number}</td>
+        //     </tr>
+        //   ))}
       //   </tbody>
       // </table>
       filteredBanks.map((bank) => (
