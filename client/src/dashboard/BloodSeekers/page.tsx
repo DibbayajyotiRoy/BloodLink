@@ -257,30 +257,42 @@ const BloodSeekersPage = () => {
         <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
           {renderSearchFilters()}
         </div>
+     
 
-        {activeSection === "donors" && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredDonors.length === 0 ? (
-              <p>No donors found matching your criteria.</p>
-            ) : (
-              filteredDonors.map((donor) => (
-                <div key={donor._id} className="border-2 border-gray-200 rounded-lg p-4 shadow-md bg-white hover:shadow-xl  transition duration-300 ease-in-out">
-                  <h2 className="font-bold text-lg">{donor.name}</h2>
-                  <p>Location: {donor.subdivision}</p>
-                  <p>Blood Type: {donor.bloodType}</p>
-                  <p>Email: {donor.email}</p>
-                  <p>Contact: {donor.number}</p>
-                  <Button
-                    className="mt-2"
-                    onClick={() => navigate(`/profile/blooddonor/${donor._id}`)}
-                  >
-                    View Profile
-                  </Button>
-                </div>
-              ))
-            )}
+{activeSection === "donors" && (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {filteredDonors.length === 0 ? (
+      <p>No donors found matching your criteria.</p>
+    ) : (
+      filteredDonors.map((donor) => (
+        <div key={donor.id} className="border-2 border-gray-200 rounded-lg p-4 shadow-md bg-white hover:shadow-xl transition duration-300 ease-in-out flex flex-col">
+          <h2 className="font-bold text-lg text-center">{donor.name}</h2>
+          <p className="text-gray-700 text-center">Location: {donor.subdivision}</p>
+          <p className="font-semibold text-red-600 text-center mt-2">
+            Blood Type: 
+            <span className="ml-1 text-red-600 px-2 py-1 rounded-full text-sm">{donor.bloodType}</span>
+          </p>
+          <p className="text-gray-700 text-center">Email: {donor.email}</p>
+          <div className="flex justify-center items-center mt-2">
+            <span className="font-semibold text-blue-600">Contact:</span>
+            <span className="ml-1 text-black-900 px-3 py-1 rounded-full text-lg">
+              {donor.number}
+            </span>
           </div>
-        )}
+          <Button
+            className="mt-4 self-center"
+            onClick={() => navigate(`/profile/blooddonor/${donor.id}`)}
+          >
+            View Profile
+          </Button>
+        </div>
+      ))
+    )}
+  </div>
+)}
+
+
+
 
 {activeSection === "banks" && (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
