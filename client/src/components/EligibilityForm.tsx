@@ -1,75 +1,81 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import HemoglobinStep from "./ui/HemoglobinStep"
-import MedicalHistoryStep from "./ui/MedicalHistoryStep"
-import TransfusionStep from "./ui/TransfusionStep"
-import EligibilityResult from "./EligibilityResult"
-import NotEligiblePage from "./NotEligible"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import MedicalHistoryStep from "./ui/MedicalHistoryStep";
+import TransfusionStep from "./ui/TransfusionStep";
+import EligibilityResult from "./EligibilityResult";
+import NotEligiblePage from "./NotEligible";
 
-const ui = [HemoglobinStep, MedicalHistoryStep, TransfusionStep]
+const ui = [MedicalHistoryStep, TransfusionStep];
 
 export default function EligibilityForm() {
-  const [currentStep, setCurrentStep] = useState(0)
+  const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     gender: "",
-    hemoglobinLevel: "",
     hasDisease: false,
     transfusionDate: null,
-  })
-  const [isEligible, setIsEligible] = useState<boolean | null>(null)
+  });
+  const [isEligible, setIsEligible] = useState<boolean | null>(null);
 
-  const CurrentStepComponent = ui[currentStep]
+  const CurrentStepComponent = ui[currentStep];
 
   const handleNext = () => {
     if (isCurrentStepValid()) {
       if (currentStep < ui.length - 1) {
-        setCurrentStep(currentStep + 1)
+        setCurrentStep(currentStep + 1);
       } else {
-        checkEligibility()
+        checkEligibility();
       }
     }
-  }
+  };
 
   const handlePrevious = () => {
-    setCurrentStep(currentStep - 1)
-  }
+    setCurrentStep(currentStep - 1);
+  };
 
   const updateFormData = (newData: Partial<typeof formData>) => {
-    setFormData({ ...formData, ...newData })
-  }
+    setFormData({ ...formData, ...newData });
+  };
 
   const checkEligibility = () => {
-    const { gender, hemoglobinLevel, hasDisease, transfusionDate } = formData
-    const hemoglobinThreshold = gender === "female" ? 12.5 : 13.0
-    const isHemoglobinOk = Number.parseFloat(hemoglobinLevel) >= hemoglobinThreshold
-    const isTransfusionOk =
-      !transfusionDate || new Date(transfusionDate) <= new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)
+    const { gender, hasDisease, transfusionDate } = formData;
 
-    setIsEligible(isHemoglobinOk && !hasDisease && isTransfusionOk)
-  }
+    // Automatically set hemoglobin level based on gender
+    const hemoglobinThreshold = gender === "female" ? 12.5 : 13.0; // Threshold values
+    const hemoglobinLevel = getHemoglobinLevel(gender); // Automatically get hemoglobin level
+
+    const isHemoglobinOk = hemoglobinLevel >= hemoglobinThreshold;
+    const isTransfusionOk =
+      !transfusionDate || new Date(transfusionDate) <= new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+
+    setIsEligible(isHemoglobinOk && !hasDisease && isTransfusionOk);
+  };
+
+  // Function to automatically determine hemoglobin level based on gender
+  const getHemoglobinLevel = (gender: string): number => {
+    // Replace with actual logic to determine hemoglobin level if needed
+    return gender === "female" ? 13.5 : 14.5; // Example values for automatic determination
+  };
 
   const isCurrentStepValid = () => {
     switch (currentStep) {
       case 0:
-        return formData.gender && formData.hemoglobinLevel
+        return formData.gender; // Only check if gender is provided
       case 1:
-        return !formData.hasDisease
-      case 2:
-        return true
+        return !formData.hasDisease; // Check for disease in the second step
       default:
-        return false
+        return false;
     }
-  }
+  };
 
   if (formData.hasDisease) {
-    return <NotEligiblePage reason="medical condition" />
+    return <NotEligiblePage reason="medical condition" />;
   }
 
   if (isEligible !== null) {
-    return <EligibilityResult isEligible={isEligible} />
+    return <EligibilityResult isEligible={isEligible} />;
   }
 
   return (
@@ -91,6 +97,5 @@ export default function EligibilityForm() {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
-
