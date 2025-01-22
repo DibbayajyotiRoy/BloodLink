@@ -19,7 +19,7 @@ export default function NotEligiblePage({ reason }: { reason: string }) {
       </CardContent>
       <CardFooter className="flex justify-center">
         <Button asChild variant="outline">
-          <Link href="/">Return to Home</Link>
+          <Link to="/">Return to Home</Link>
         </Button>
       </CardFooter>
     </Card>

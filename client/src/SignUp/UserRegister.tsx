@@ -65,7 +65,7 @@ export default function DonorForm() {
       toast.success("Registration successful!");
   
       // Redirect to login page after successful signup
-      navigate("/login");
+      navigate("/eligibility");
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");

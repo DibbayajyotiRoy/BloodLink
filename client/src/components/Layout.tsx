@@ -42,7 +42,7 @@ const authNavItems: NavItem[] = [
   },
   {
     label: "Register",
-    href: "/eligibility",
+    href: "/register/donor",
     icon: <User className="h-4 w-4" />
   }
 ];
