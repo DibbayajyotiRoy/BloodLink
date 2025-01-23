@@ -7,64 +7,78 @@ import MedicalHistoryStep from "./ui/MedicalHistoryStep";
 import TransfusionStep from "./ui/TransfusionStep";
 import EligibilityResult from "./EligibilityResult";
 import NotEligiblePage from "./NotEligible";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ui = [MedicalHistoryStep, TransfusionStep];
 
 export default function EligibilityForm() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
-    gender: "",
     hasDisease: false,
     transfusionDate: null,
+    noneOfTheAbove: false,
   });
+  const [pendingData, setPendingData] = useState({}); // Temporarily store form changes
   const [isEligible, setIsEligible] = useState<boolean | null>(null);
 
+  const navigate = useNavigate();
   const CurrentStepComponent = ui[currentStep];
 
-  const handleNext = () => {
-    if (isCurrentStepValid()) {
-      if (currentStep < ui.length - 1) {
-        setCurrentStep(currentStep + 1);
+  const handleNext = async () => {
+    console.log("Current Step:", currentStep); // Debug: Current step
+    console.log("Pending Data:", pendingData); // Debug: Pending changes
+    const updatedFormData = { ...formData, ...pendingData };
+    console.log("Updated Form Data:", updatedFormData); // Debug: Updated data
+  
+    if (isCurrentStepValid(updatedFormData)) {
+      console.log("Current step is valid");
+      if (updatedFormData.noneOfTheAbove) {
+        console.log("None of the Above is selected");
+        const donorId = localStorage.getItem("donorId");
+        if (donorId) {
+          console.log("Sending request to backend...");
+          try {
+            const response = await axios.put("http://localhost:3000/blooddonor/eligibility", { donorId });
+            console.log("Response from backend:", response.data);
+            localStorage.removeItem("donorId");
+          } catch (error) {
+            console.error("Error sending eligibility data:", error);
+          }
+        }
+        navigate("/login");
       } else {
-        checkEligibility();
+        console.log("Navigating to the next step");
+        if (currentStep < ui.length - 1) {
+          setCurrentStep(currentStep + 1);
+          setPendingData({});
+        } else {
+          navigate("/login");
+        }
       }
+    } else {
+      console.log("Current step is invalid");
     }
   };
+  
+  
+  
 
   const handlePrevious = () => {
     setCurrentStep(currentStep - 1);
+    setPendingData({}); // Clear pending changes when going back
   };
 
   const updateFormData = (newData: Partial<typeof formData>) => {
-    setFormData({ ...formData, ...newData });
+    setPendingData(newData); // Store changes temporarily
   };
 
-  const checkEligibility = () => {
-    const { gender, hasDisease, transfusionDate } = formData;
-
-    // Automatically set hemoglobin level based on gender
-    const hemoglobinThreshold = gender === "female" ? 12.5 : 13.0; // Threshold values
-    const hemoglobinLevel = getHemoglobinLevel(gender); // Automatically get hemoglobin level
-
-    const isHemoglobinOk = hemoglobinLevel >= hemoglobinThreshold;
-    const isTransfusionOk =
-      !transfusionDate || new Date(transfusionDate) <= new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
-
-    setIsEligible(isHemoglobinOk && !hasDisease && isTransfusionOk);
-  };
-
-  // Function to automatically determine hemoglobin level based on gender
-  const getHemoglobinLevel = (gender: string): number => {
-    // Replace with actual logic to determine hemoglobin level if needed
-    return gender === "female" ? 13.5 : 14.5; // Example values for automatic determination
-  };
-
-  const isCurrentStepValid = () => {
+  const isCurrentStepValid = (data: typeof formData) => {
     switch (currentStep) {
       case 0:
-        return formData.gender; // Only check if gender is provided
+        return true; // First step always valid
       case 1:
-        return !formData.hasDisease; // Check for disease in the second step
+        return data.noneOfTheAbove || !data.hasDisease; // Check "None of the Above" or no disease
       default:
         return false;
     }
@@ -86,14 +100,17 @@ export default function EligibilityForm() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <CurrentStepComponent formData={formData} updateFormData={updateFormData} />
+        <CurrentStepComponent
+          formData={{ ...formData, ...pendingData }} // Include pending changes for the current step
+          updateFormData={updateFormData}
+        />
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button onClick={handlePrevious} disabled={currentStep === 0}>
           Previous
         </Button>
-        <Button onClick={handleNext} disabled={!isCurrentStepValid()}>
-          {currentStep === ui.length - 1 ? "Check Eligibility" : "Next"}
+        <Button onClick={handleNext}>
+          {currentStep === ui.length - 1 ? "Login" : "Next"}
         </Button>
       </CardFooter>
     </Card>

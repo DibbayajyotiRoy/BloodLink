@@ -112,8 +112,8 @@ bloodDonorRoute.post('/signin', async (req,res)=>{
           const user = await bloodDonorModel.findOne({
               name
           })
-          const response = await bcrypt.compare(password , user.password)
           console.log(user)
+          const response = await bcrypt.compare(password , user.password)
           if(!response){
               console.log(response)
               res.status(404).json({
@@ -324,6 +324,36 @@ bloodDonorRoute.get("/donor-counts", async (req, res) => {
     res.status(500).json({ error: "Internal server error" })
   }
 })
+
+// Creating the eligibility route
+bloodDonorRoute.put("/eligibility", async (req, res) => {
+  try {
+    const { donorId } = req.body;
+
+    if (!donorId) {
+      return res.status(400).json({ message: "Donor ID is required" });
+    }
+
+    console.log("Received donorId:", donorId);
+
+    const donor = await bloodDonorModel.findById(donorId);
+
+    if (!donor) {
+      return res.status(404).json({ message: "Donor not found" });
+    }
+
+    donor.eligibility = true; // Update the eligibility field
+    await donor.save();
+
+    res.status(200).json({
+      donor: donor,
+      message: "Updated eligibility successfully",
+    });
+  } catch (error) {
+    console.error("Error updating eligibility:", error);
+    res.status(500).json({ message: "An error occurred while updating eligibility" });
+  }
+});
 
 
 

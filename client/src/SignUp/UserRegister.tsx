@@ -66,10 +66,17 @@ export default function DonorForm() {
         "http://localhost:3000/blooddonor/signup",
         donorInput
       );
-      console.log(response.data);
+      console.log(response.data.user.id)
+  
+      // Assuming the response contains the donor's _id
+      
+  
+      // Set the donor's id in localStorage
+      localStorage.setItem("donorId", response.data.user.id);
+  
       toast.success("Registration successful!");
   
-      // Redirect to login page after successful signup
+      // Redirect to the eligibility page
       navigate("/eligibility");
     } catch (error) {
       console.error("Form submission error", error);
@@ -77,10 +84,8 @@ export default function DonorForm() {
     }
   }
   
+  
 
-  if(isSubmitted){
-    navigate("/bloodseekers")
-  }
 
   // if (isSubmitted) {
   //   return (

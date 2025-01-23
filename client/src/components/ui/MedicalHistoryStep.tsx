@@ -1,5 +1,5 @@
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const medicalConditions = [
   { id: "hiv", label: "HIV/AIDS or increased exposure to HIV/AIDS virus" },
@@ -10,16 +10,25 @@ const medicalConditions = [
   { id: "growthHormone", label: "Received cadaveric pituitary human growth hormone" },
   { id: "ebola", label: "Ebola virus infection or disease" },
   { id: "none", label: "None of the above" },
-]
+];
 
 export default function MedicalHistoryStep({ formData, updateFormData }) {
-  const handleCheckboxChange = (condition: string) => {
-    if (condition === "none") {
-      updateFormData({ hasDisease: false })
+  const handleCheckboxChange = (conditionId: string, checked: boolean) => {
+    let updatedConditions = [...(formData.selectedConditions || [])];
+    if (conditionId === "none") {
+      updatedConditions = checked ? ["none"] : [];
     } else {
-      updateFormData({ hasDisease: true })
+      if (checked) {
+        updatedConditions = updatedConditions.filter((id) => id !== "none");
+        updatedConditions.push(conditionId);
+      } else {
+        updatedConditions = updatedConditions.filter((id) => id !== conditionId);
+      }
     }
-  }
+
+    const hasDisease = updatedConditions.length > 0 && !updatedConditions.includes("none");
+    updateFormData({ selectedConditions: updatedConditions, hasDisease });
+  };
 
   return (
     <div className="space-y-4">
@@ -28,13 +37,12 @@ export default function MedicalHistoryStep({ formData, updateFormData }) {
         <div key={condition.id} className="flex items-center space-x-2">
           <Checkbox
             id={condition.id}
-            checked={condition.id === "none" ? !formData.hasDisease : formData.hasDisease}
-            onCheckedChange={() => handleCheckboxChange(condition.id)}
+            checked={(formData.selectedConditions || []).includes(condition.id)}
+            onCheckedChange={(checked) => handleCheckboxChange(condition.id, checked)}
           />
           <Label htmlFor={condition.id}>{condition.label}</Label>
         </div>
       ))}
     </div>
-  )
+  );
 }
-
