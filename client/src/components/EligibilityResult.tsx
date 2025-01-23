@@ -1,10 +1,9 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, XCircle } from "lucide-react";
 
 export default function EligibilityResult({ isEligible }: { isEligible: boolean }) {
-  const navigate = useNavigate(); 
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
