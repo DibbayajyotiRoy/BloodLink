@@ -265,7 +265,7 @@ const BloodSeekersPage = () => {
       <p>No donors found matching your criteria.</p>
     ) : (
       filteredDonors.map((donor) => (
-        <div key={donor.id} className="border-2 border-gray-200 rounded-lg p-4 shadow-md bg-white hover:shadow-xl transition duration-300 ease-in-out flex flex-col">
+        <div key={donor._id} className="border-2 border-gray-200 rounded-lg p-4 shadow-md bg-white hover:shadow-xl transition duration-300 ease-in-out flex flex-col">
           <h2 className="font-bold text-lg text-center">{donor.name}</h2>
           <p className="text-gray-700 text-center">Location: {donor.subdivision}</p>
           <p className="font-semibold text-red-600 text-center mt-2">
@@ -281,7 +281,7 @@ const BloodSeekersPage = () => {
           </div>
           <Button
             className="mt-4 self-center"
-            onClick={() => navigate(`/profile/blooddonor/${donor.id}`)}
+            onClick={() => navigate(`/profile/blooddonor/${donor._id}`)}
           >
             View Profile
           </Button>

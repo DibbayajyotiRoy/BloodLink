@@ -113,7 +113,7 @@ bloodDonorRoute.post('/signin', async (req,res)=>{
               name
           })
           const response = await bcrypt.compare(password , user.password)
-
+          console.log(user)
           if(!response){
               console.log(response)
               res.status(404).json({
@@ -134,7 +134,8 @@ bloodDonorRoute.post('/signin', async (req,res)=>{
 
       } catch (error) {
           console.log(error)
-          res.status(400).json({
+          res.status(500).json({
+              error:error,
               message:"Database server failed"
           })
       }
