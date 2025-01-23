@@ -17,7 +17,7 @@ export function DonorChart() {
   useEffect(() => {
     const fetchDonorCounts = async () => {
       try {
-        const response = await fetch("/api/donor-counts")
+        const response = await fetch("http://localhost:3000/blooddonor/donor-counts")
         if (!response.ok) {
           throw new Error("Failed to fetch donor counts")
         }
