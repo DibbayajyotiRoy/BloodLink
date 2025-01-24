@@ -18,12 +18,14 @@ const Login = React.lazy(() => import('./login/login'));
 const ProfilePage = React.lazy(() => import('./dashboard/ProfilePage/page'));
 const BankProfile = React.lazy(() => import('./dashboard/ProfilePage/BankProfile'));
 const DonorProfilePage = React.lazy(() => import('./dashboard/ProfilePage/DonorProfile'));
+const EligibilityPage = React.lazy(() => import('./SignUp/eligibilityPage'));
 
 
 // Define route configuration
 const routes = [
   { path: '/', element: <LandingPage /> },
   { path: '/register/donor', element: <DonorForm /> },
+  { path: '/eligibility', element: <EligibilityPage /> },
   { path: '/register/blood-bank', element: <BloodBankRegister /> },
   { path: '/bloodseekers', element: <BloodSeekersPage /> },
   { path: '/dashboard', element: <BloodBankDashboard /> },

@@ -1,79 +1,67 @@
-"use client";
+"use client"
 
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import axios from "axios"; // Import Axios
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom"; // Use useNavigate for redirection
+import { toast } from "sonner"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import axios from "axios"
+import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { useNavigate } from "react-router-dom"
 
-// Define the form schema using Zod
 const formSchema = z.object({
   username: z.string().min(8, "Username must be at least 8 characters"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-});
+})
 
 export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-  });
-  const navigate = useNavigate(); // Hook to navigate to another page
+  })
+  const navigate = useNavigate()
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // First, try to log in as a blood donor
-      const donorResponse = await axios.post(
-        "http://localhost:3000/blooddonor/signin",
-        {
-          name: values.username,
-          password: values.password, // Send username and password
-        }
-      );
+      const donorResponse = await axios.post("http://localhost:3000/blooddonor/signin", {
+        name: values.username,
+        password: values.password,
+      })
 
-      console.log(donorResponse.data); // Log the response data for debugging
+      console.log(donorResponse.data)
 
-      // If login is successful, handle as a blood donor
-      localStorage.setItem("token", donorResponse.data.token);
-      localStorage.setItem("userType", "blooddonor");
+      localStorage.setItem("token", donorResponse.data.token)
+      localStorage.setItem("userType", "blooddonor")
 
-      toast.success("Blood Donor Login successful!");
-      navigate("/"); // Navigate to home page for blood donor
-
+      toast.success("Blood Donor Login successful!")
+      navigate("/")
     } catch (donorError) {
-      // If blood donor login fails, try to log in as a blood bank
       try {
-        const bankResponse = await axios.post(
-          "http://localhost:3000/bloodbank/signin",
-          {
-            name: values.username,
-            password: values.password, // Send username and password
-          }
-        );
+        const bankResponse = await axios.post("http://localhost:3000/bloodbank/signin", {
+          name: values.username,
+          password: values.password,
+        })
 
-        console.log(bankResponse.data); // Log the response data for debugging
+        console.log(bankResponse.data)
 
-        // If login is successful, handle as a blood bank
-        localStorage.setItem("token", bankResponse.data.token);
-        localStorage.setItem("userType", "bloodbank");
+        localStorage.setItem("token", bankResponse.data.token)
+        localStorage.setItem("userType", "bloodbank")
 
-        toast.success("Blood Bank Login successful!");
-        navigate("/dashboard"); // Navigate to blood bank dashboard
-
+        toast.success("Blood Bank Login successful!")
+        navigate("/dashboard")
       } catch (bankError) {
-        // If neither login is successful, show an error message
-        console.error("Form submission error", bankError);
-        toast.error("Invalid username or password. Please try again.");
+        console.error("Form submission error", bankError)
+        toast.error("Invalid username or password. Please try again.")
+
+        // New feature: Display error message in the form
+        form.setError("username", {
+          type: "manual",
+          message: "Invalid username or password",
+        })
+        form.setError("password", {
+          type: "manual",
+          message: "Invalid username or password",
+        })
       }
     }
   }
@@ -91,12 +79,7 @@ export default function Login() {
                 <FormItem>
                   <FormLabel className="flex">Username</FormLabel>
                   <FormControl>
-                    <Input
-                      className="shadow hover:shadow-lg"
-                      placeholder="Enter username"
-                      type="text"
-                      {...field}
-                    />
+                    <Input className="shadow hover:shadow-lg" placeholder="Enter username" type="text" {...field} />
                   </FormControl>
                   <FormDescription>Enter your username</FormDescription>
                   <FormMessage />
@@ -104,7 +87,6 @@ export default function Login() {
               )}
             />
 
-            {/* Password Field */}
             <FormField
               control={form.control}
               name="password"
@@ -112,12 +94,7 @@ export default function Login() {
                 <FormItem>
                   <FormLabel className="flex">Password</FormLabel>
                   <FormControl>
-                    <Input
-                      className="shadow hover:shadow-lg"
-                      placeholder="Enter password"
-                      type="password"
-                      {...field}
-                    />
+                    <Input className="shadow hover:shadow-lg" placeholder="Enter password" type="password" {...field} />
                   </FormControl>
                   <FormDescription>Enter your password</FormDescription>
                   <FormMessage />
@@ -125,16 +102,13 @@ export default function Login() {
               )}
             />
 
-            {/* Submit Button */}
-            <Button
-              className="min-w-40 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg"
-              type="submit"
-            >
+            <Button className="min-w-40 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg" type="submit">
               Login
             </Button>
           </form>
         </Form>
       </div>
     </div>
-  );
+  )
 }
+

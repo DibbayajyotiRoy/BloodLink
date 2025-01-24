@@ -112,8 +112,8 @@ bloodDonorRoute.post('/signin', async (req,res)=>{
           const user = await bloodDonorModel.findOne({
               name
           })
+          console.log(user)
           const response = await bcrypt.compare(password , user.password)
-
           if(!response){
               console.log(response)
               res.status(404).json({
@@ -134,7 +134,8 @@ bloodDonorRoute.post('/signin', async (req,res)=>{
 
       } catch (error) {
           console.log(error)
-          res.status(400).json({
+          res.status(500).json({
+              error:error,
               message:"Database server failed"
           })
       }
@@ -290,5 +291,70 @@ bloodDonorRoute.put("/update", async (req, res) => {
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
+
+// Add this new route to your existing bloodDonorRoute file
+
+bloodDonorRoute.get("/donor-counts", async (req, res) => {
+  try {
+    const donorCounts = await bloodDonorModel.aggregate([
+      {
+        $group: {
+          _id: "$subdivision",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          subdivision: "$_id",
+          count: 1,
+          _id: 0,
+        },
+      },
+      {
+        $sort: { count: -1 },
+      },
+      {
+        $limit: 10, // Limit to top 10 subdivisions
+      },
+    ])
+
+    res.status(200).json(donorCounts)
+  } catch (error) {
+    console.error("Error fetching donor counts:", error)
+    res.status(500).json({ error: "Internal server error" })
+  }
+})
+
+// Creating the eligibility route
+bloodDonorRoute.put("/eligibility", async (req, res) => {
+  try {
+    const { donorId } = req.body;
+
+    if (!donorId) {
+      return res.status(400).json({ message: "Donor ID is required" });
+    }
+
+    console.log("Received donorId:", donorId);
+
+    const donor = await bloodDonorModel.findById(donorId);
+
+    if (!donor) {
+      return res.status(404).json({ message: "Donor not found" });
+    }
+
+    donor.eligibility = true; // Update the eligibility field
+    await donor.save();
+
+    res.status(200).json({
+      donor: donor,
+      message: "Updated eligibility successfully",
+    });
+  } catch (error) {
+    console.error("Error updating eligibility:", error);
+    res.status(500).json({ message: "An error occurred while updating eligibility" });
+  }
+});
+
+
 
 export { bloodDonorRoute };

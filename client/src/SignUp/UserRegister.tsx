@@ -45,37 +45,47 @@ export default function DonorForm() {
   });
 
   useEffect(() => {
-    setDonorInput({
-      name: form.getValues("name_6544930115"),
-      email: form.getValues("name_6037749245"),
-      password: form.getValues("name_9230315876"),
-      number: form.getValues("name_8219849486"),
-      bloodType: form.getValues("name_7157177887"),
-      subdivision: form.getValues("name_5062014857"),
+    const subscription = form.watch((values) => {
+      setDonorInput({
+        name: values.name_6544930115 || "",
+        email: values.name_6037749245 || "",
+        password: values.name_9230315876 || "",
+        number: values.name_8219849486 || "",
+        bloodType: values.name_7157177887 || "",
+        subdivision: values.name_5062014857 || "",
+      });
     });
-  }, [form.watch()]);
-
+  
+    // Cleanup the subscription on unmount
+    return () => subscription.unsubscribe();
+  }, [form]);
+  
   async function onSubmit() {
     try {
       const response = await axios.post(
         "http://localhost:3000/blooddonor/signup",
         donorInput
       );
-      console.log(response.data);
+      console.log(response.data.user.id)
+  
+      // Assuming the response contains the donor's _id
+      
+  
+      // Set the donor's id in localStorage
+      localStorage.setItem("donorId", response.data.user.id);
+  
       toast.success("Registration successful!");
   
-      // Redirect to login page after successful signup
-      navigate("/login");
+      // Redirect to the eligibility page
+      navigate("/eligibility");
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
     }
   }
   
+  
 
-  if(isSubmitted){
-    navigate("/bloodseekers")
-  }
 
   // if (isSubmitted) {
   //   return (

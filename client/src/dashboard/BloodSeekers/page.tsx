@@ -223,7 +223,7 @@ const BloodSeekersPage = () => {
               Find Blood
             </Link> */}
           </nav>
-          <div className="flex space-x-2">
+          {/* <div className="flex space-x-2">
             <Link to="/register/blood-bank">
               <Button variant="outline" className="hidden md:inline-flex">
                 Register as Blood Bank
@@ -234,7 +234,7 @@ const BloodSeekersPage = () => {
                 Become a Donor
               </Button>
             </Link>
-          </div>
+  </div> */}
         </div>
       </header>
 
@@ -257,30 +257,42 @@ const BloodSeekersPage = () => {
         <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
           {renderSearchFilters()}
         </div>
+     
 
-        {activeSection === "donors" && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredDonors.length === 0 ? (
-              <p>No donors found matching your criteria.</p>
-            ) : (
-              filteredDonors.map((donor) => (
-                <div key={donor._id} className="border-2 border-gray-200 rounded-lg p-4 shadow-md bg-white hover:shadow-xl  transition duration-300 ease-in-out">
-                  <h2 className="font-bold text-lg">{donor.name}</h2>
-                  <p>Location: {donor.subdivision}</p>
-                  <p>Blood Type: {donor.bloodType}</p>
-                  <p>Email: {donor.email}</p>
-                  <p>Contact: {donor.number}</p>
-                  <Button
-                    className="mt-2"
-                    onClick={() => navigate(`/profile/blooddonor/${donor._id}`)}
-                  >
-                    View Profile
-                  </Button>
-                </div>
-              ))
-            )}
+{activeSection === "donors" && (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {filteredDonors.length === 0 ? (
+      <p>No donors found matching your criteria.</p>
+    ) : (
+      filteredDonors.map((donor) => (
+        <div key={donor._id} className="border-2 border-gray-200 rounded-lg p-4 shadow-md bg-white hover:shadow-xl transition duration-300 ease-in-out flex flex-col">
+          <h2 className="font-bold text-lg text-center">{donor.name}</h2>
+          <p className="text-gray-700 text-center">Location: {donor.subdivision}</p>
+          <p className="font-semibold text-red-600 text-center mt-2">
+            Blood Type: 
+            <span className="ml-1 text-red-600 px-2 py-1 rounded-full text-sm">{donor.bloodType}</span>
+          </p>
+          <p className="text-gray-700 text-center">Email: {donor.email}</p>
+          <div className="flex justify-center items-center mt-2">
+            <span className="font-semibold text-blue-600">Contact:</span>
+            <span className="ml-1 text-black-900 px-3 py-1 rounded-full text-lg">
+              {donor.number}
+            </span>
           </div>
-        )}
+          <Button
+            className="mt-4 self-center"
+            onClick={() => navigate(`/profile/blooddonor/${donor._id}`)}
+          >
+            View Profile
+          </Button>
+        </div>
+      ))
+    )}
+  </div>
+)}
+
+
+
 
 {activeSection === "banks" && (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -292,19 +304,19 @@ const BloodSeekersPage = () => {
       //     <tr className="bg-gray-100">
       //       <th className="border border-gray-300 px-4 py-2 text-center">Name</th>
       //       <th className="border border-gray-300 px-4 py-2 text-center">District</th>
-      //       <th className="border border-gray-300 px-4 py-2 text-center">Email</th>
-      //       <th className="border border-gray-300 px-4 py-2 text-center">Contact</th>
-      //     </tr>
-      //   </thead>
-      //   <tbody>
-      //     {filteredBanks.map((bank) => (
-      //       <tr key={bank.id} className="odd:bg-white even:bg-slate-50">
-      //         <td className=" border border-gray-300 px-4 py-2">{bank.name}</td>
-      //         <td className=" border border-gray-300 px-4 py-2">{bank.district}</td>
-      //         <td className=" border border-gray-300 px-4 py-2">{bank.email}</td>
-      //         <td className=" border border-gray-300 px-4 py-2">{bank.number}</td>
-      //       </tr>
-      //     ))}
+        //     <th className="border border-gray-300 px-4 py-2 text-center">Email</th>
+        //     <th className="border border-gray-300 px-4 py-2 text-center">Contact</th>
+        //   </tr>
+        // </thead>
+        // <tbody>
+        //   {filteredBanks.map((bank) => (
+        //     <tr key={bank.id} className="odd:bg-white even:bg-slate-50">
+        //       <td className=" border border-gray-300 px-4 py-2">{bank.name}</td>
+        //       <td className=" border border-gray-300 px-4 py-2">{bank.district}</td>
+        //       <td className=" border border-gray-300 px-4 py-2">{bank.email}</td>
+        //       <td className=" border border-gray-300 px-4 py-2">{bank.number}</td>
+        //     </tr>
+        //   ))}
       //   </tbody>
       // </table>
       filteredBanks.map((bank) => (
